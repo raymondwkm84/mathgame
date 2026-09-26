@@ -12,6 +12,7 @@
     margin: 0;
     padding: 15px;
     user-select: none;
+    overflow-x: hidden;
   }
   .container {
     max-width: 520px;
@@ -20,6 +21,7 @@
     padding: 20px;
     border-radius: 24px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    position: relative;
   }
   h1 { font-size: 26px; color: #2e7d32; margin: 0 0 10px 0; }
 
@@ -31,7 +33,7 @@
     background: #e8f5e9;
     padding: 10px 14px;
     border-radius: 16px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     font-size: 14px;
     font-weight: bold;
     color: #1b5e20;
@@ -83,6 +85,33 @@
     top: -18px;
     left: 8px;
     font-size: 22px;
+  }
+
+  /* Daily Progress Bar */
+  .progress-wrap {
+    background: #f1f2f6;
+    border-radius: 12px;
+    height: 16px;
+    width: 100%;
+    margin-bottom: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
   }
 
   /* Menu Styles */
@@ -292,22 +321,24 @@
   .success { color: #2e7d32; }
   .retry { color: #e65100; }
 
-  /* SHOP MODAL */
-  #shop-modal {
+  /* Modals */
+  .modal-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
   }
-  .shop-content {
+  .modal-box {
     background: white;
     width: 90%;
     max-width: 420px;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 24px 20px;
+    border-radius: 24px;
     text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
   .shop-item-grid {
     display: grid;
@@ -333,12 +364,25 @@
   }
   .btn-buy { background: #f39c12; color: white; }
   .btn-equip { background: #27ae60; color: white; }
+
+  /* Confetti Canvas */
+  #confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+  }
 </style>
 </head>
 <body>
 
+<canvas id="confetti-canvas"></canvas>
+
 <div class="container">
-  <!-- STATUS HEADER WITH TODAY & TOTAL SCORE -->
+  <!-- STATUS HEADER -->
   <div class="status-header">
     <div class="score-col">
       <div class="score-pill">🌟 Today: <span id="today-score">0</span></div>
@@ -350,6 +394,12 @@
     </div>
     <div class="coin-badge" onclick="openShop()">🪙 <span id="coin-count">0</span></div>
     <div class="timer-badge" id="timer-box">⏱️ 00:00</div>
+  </div>
+
+  <!-- PROGRESS BAR TOWARDS 30 QUESTIONS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="daily-bar"></div>
+    <div class="progress-text" id="daily-text">Daily Goal: 0 / 30</div>
   </div>
 
   <!-- MENU VIEW -->
@@ -387,12 +437,28 @@
 </div>
 
 <!-- DINO SHOP MODAL -->
-<div id="shop-modal">
-  <div class="shop-content">
+<div id="shop-modal" class="modal-overlay">
+  <div class="modal-box">
     <h2>🦖 Dino Hat Shop</h2>
     <div>Use your coins to dress up Dino!</div>
     <div class="shop-item-grid" id="shop-grid"></div>
     <button class="btn-back" onclick="closeShop()" style="width: 100%; padding: 10px;">Close Shop</button>
+  </div>
+</div>
+
+<!-- VICTORY MODAL FOR 30 QUESTIONS -->
+<div id="victory-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div style="font-size: 55px; margin-bottom: 5px;">🏆🎉</div>
+    <h2 style="color: #2e7d32; margin: 0 0 8px 0;">STAGE CLEAR!</h2>
+    <div style="font-size: 18px; font-weight: bold; color: #e65100; margin-bottom: 10px;">
+      You completed 30 questions today!
+    </div>
+    <div style="color: #555; margin-bottom: 18px;">
+      Super Math Champion! Here is a bonus reward:<br>
+      <span style="font-size: 20px; font-weight: bold; color: #d35400;">🪙 +5 Bonus Coins!</span>
+    </div>
+    <button class="btn-shop" style="width: 100%; padding: 12px; font-size: 17px;" onclick="closeVictoryModal()">Keep Playing ➔</button>
   </div>
 </div>
 
@@ -486,11 +552,94 @@ function playSuccessSound() {
   });
 }
 
-// --- SCORE, COIN & SHOP SYSTEM (PERSISTENT VIA LOCALSTORAGE) ---
+// 30題大過關喇叭勝利音效 (Fanfare Sound)
+function playFanfareSound() {
+  initAudio();
+  const fanfare = [
+    { f: 261.63, t: 0.0, d: 0.15 },
+    { f: 329.63, t: 0.15, d: 0.15 },
+    { f: 392.00, t: 0.30, d: 0.15 },
+    { f: 523.25, t: 0.45, d: 0.45 },
+    { f: 392.00, t: 0.70, d: 0.15 },
+    { f: 523.25, t: 0.85, d: 0.65 }
+  ];
+  fanfare.forEach(note => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(note.f, ctx.currentTime + note.t);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime + note.t);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + note.t + note.d);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + note.t);
+    osc.stop(ctx.currentTime + note.t + note.d);
+  });
+}
+
+// --- CONFETTI ANIMATION (彩帶飄落特效) ---
+let confettiParticles = [];
+let confettiAnimationId = null;
+
+function triggerConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx2d = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#ff7979'];
+  confettiParticles = [];
+
+  for (let i = 0; i < 120; i++) {
+    confettiParticles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height, // start above screen
+      w: Math.random() * 12 + 6,
+      h: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedY: Math.random() * 4 + 3,
+      speedX: Math.random() * 3 - 1.5,
+      rot: Math.random() * 360,
+      rotSpeed: Math.random() * 8 - 4
+    });
+  }
+
+  if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+  renderConfetti(ctx2d, canvas);
+
+  // Stop after 6 seconds
+  setTimeout(() => {
+    cancelAnimationFrame(confettiAnimationId);
+    ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+  }, 6000);
+}
+
+function renderConfetti(ctx2d, canvas) {
+  ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+  confettiParticles.forEach(p => {
+    ctx2d.save();
+    ctx2d.translate(p.x, p.y);
+    ctx2d.rotate((p.rot * Math.PI) / 180);
+    ctx2d.fillStyle = p.color;
+    ctx2d.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    ctx2d.restore();
+
+    p.y += p.speedY;
+    p.x += p.speedX;
+    p.rot += p.rotSpeed;
+
+    if (p.y > canvas.height) {
+      p.y = -20;
+      p.x = Math.random() * canvas.width;
+    }
+  });
+  confettiAnimationId = requestAnimationFrame(() => renderConfetti(ctx2d, canvas));
+}
+
+// --- SCORE, COIN & GOAL SYSTEM ---
 let coins = parseInt(localStorage.getItem('dino_coins')) || 0;
 let totalScore = parseInt(localStorage.getItem('dino_total_score')) || 0;
 
-// Daily score tracking
 function getTodayString() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -498,13 +647,15 @@ function getTodayString() {
 
 let savedDate = localStorage.getItem('dino_score_date') || getTodayString();
 let todayScore = parseInt(localStorage.getItem('dino_today_score')) || 0;
+let celebratedToday = (localStorage.getItem('dino_celebrated_date') === getTodayString());
 
-// Reset today's score if it's a new day
 if (savedDate !== getTodayString()) {
   todayScore = 0;
   savedDate = getTodayString();
+  celebratedToday = false;
   localStorage.setItem('dino_score_date', savedDate);
   localStorage.setItem('dino_today_score', todayScore);
+  localStorage.removeItem('dino_celebrated_date');
 }
 
 let ownedHats = JSON.parse(localStorage.getItem('dino_owned_hats')) || ['none'];
@@ -526,6 +677,13 @@ function updateHeaderDisplay() {
   localStorage.setItem('dino_total_score', totalScore);
   localStorage.setItem('dino_coins', coins);
 
+  // Update Daily Progress Bar
+  const percent = Math.min(100, Math.round((todayScore / 30) * 100));
+  document.getElementById('daily-bar').style.width = percent + '%';
+  document.getElementById('daily-text').innerText = (todayScore >= 30) 
+    ? `🎉 Daily Goal Cleared! (${todayScore}/30)` 
+    : `Daily Goal: ${todayScore} / 30`;
+
   const hatIcon = (currentHat === 'none') ? '' : (SHOP_ITEMS.find(i => i.id === currentHat)?.icon || '');
   document.getElementById('equipped-hat').innerText = hatIcon;
 }
@@ -535,6 +693,24 @@ function recordCorrectAnswer() {
   totalScore += 1;
   coins += 1;
   updateHeaderDisplay();
+
+  // Check 30 questions goal
+  if (todayScore >= 30 && !celebratedToday) {
+    celebratedToday = true;
+    localStorage.setItem('dino_celebrated_date', getTodayString());
+    coins += 5; // Bonus coins
+    updateHeaderDisplay();
+    setTimeout(() => {
+      playFanfareSound();
+      triggerConfetti();
+      document.getElementById('victory-modal').style.display = 'flex';
+    }, 600);
+  }
+}
+
+function closeVictoryModal() {
+  playPopSound();
+  document.getElementById('victory-modal').style.display = 'none';
 }
 
 function openShop() {
@@ -864,7 +1040,7 @@ function checkAnswer(val) {
   if (val === correctAns) {
     isAnswered = true;
     stopTimer();
-    recordCorrectAnswer(); // Update Today, Total & Coins
+    recordCorrectAnswer();
     playSuccessSound();
     msg.className = 'msg-area success';
     msg.innerText = '🦖 ROAR! +1 Point! Great job!';
