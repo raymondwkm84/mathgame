@@ -199,6 +199,68 @@
     border-radius: 10px;
   }
 
+  /* --- MISSION RED BOMB TIMER (PICTURE MATCH) --- */
+  .bomb-timer-widget {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 66px;
+    height: 72px;
+  }
+  .bomb-cap {
+    width: 20px;
+    height: 8px;
+    background: #c62828;
+    border-radius: 5px 5px 0 0;
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.6);
+    margin-bottom: -2px;
+    z-index: 2;
+  }
+  .bomb-body {
+    width: 64px;
+    height: 64px;
+    background: radial-gradient(circle at 35% 30%, #ff5252, #e53935 48%, #b71c1c 90%);
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 3px 5px rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .bomb-body::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 24px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: rotate(-30deg);
+  }
+  .bomb-display-box {
+    background: #000000;
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace, sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1.5px solid #222222;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.9);
+    letter-spacing: 0.5px;
+    z-index: 3;
+  }
+  .bomb-critical {
+    animation: bombPulse 0.4s infinite alternate, shake 0.2s infinite;
+  }
+  @keyframes bombPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff1744); }
+    100% { transform: scale(1.1); filter: drop-shadow(0 0 12px #ff1744); }
+  }
+
   .question-box {
     font-size: 34px;
     font-weight: bold;
@@ -583,7 +645,9 @@
       <div class="top-bar">
         <button class="btn-back" onclick="exitToMenu()">◀ Menu</button>
         <div class="mode-badge" id="mode-badge">Mode</div>
-        <div class="timer-banner" id="game-timer">⏱️ 00:00</div>
+        <div id="game-timer-container">
+          <div class="timer-banner" id="game-timer">Practice</div>
+        </div>
         <button class="btn-back" id="btn-visual-toggle" onclick="toggleVisual()">👁️ Visual: ON</button>
       </div>
 
@@ -613,7 +677,7 @@
   <div class="modal-box">
     <h2>📊 Learning Analytics Report</h2>
     <div class="stat-card">
-      <div>⏱️️ Total Time Spent: <span class="stat-highlight" id="an-time">0 min</span></div>
+      <div>⏱ Total Time Spent: <span class="stat-highlight" id="an-time">0 min</span></div>
       <div>✅ Total Correct: <span class="stat-highlight" id="an-correct">0</span> questions</div>
       <div>❌ Total Mistakes: <span class="stat-highlight" id="an-wrong">0</span> times</div>
       <div>⚡ Average Speed: <span class="stat-highlight" id="an-speed">0s</span> per question</div>
@@ -940,6 +1004,10 @@ let make10_moved = 0;
 let half_sharedCount = 0;
 let isDoubleQuestion = true;
 
+// Keyboard input buffer
+let keyboardBuffer = '';
+let keyboardTimer = null;
+
 const ALL_CURRICULUM_MODES = ['add10','sub10','make10','bonds','doubles','moreless','skip','compare'];
 
 function toggleVisual() {
@@ -958,7 +1026,7 @@ function startMode(mode) {
   isChallenge = false;
   document.getElementById('menu-view').style.display = 'none';
   document.getElementById('game-view').style.display = 'block';
-  document.getElementById('game-timer').innerText = 'Practice';
+  updateTimerBanner('Practice');
   nextQuestion();
 }
 
@@ -975,14 +1043,14 @@ function startChallenge(chType) {
 
   if (chType === 'bomb') {
     challengeTimer = 600;
-    updateTimerBanner(`💣 10:00`);
+    updateTimerBanner('10:00');
     challengeInterval = setInterval(() => {
       challengeTimer--;
       const m = Math.floor(challengeTimer / 60).toString().padStart(2, '0');
       const s = (challengeTimer % 60).toString().padStart(2, '0');
-      updateTimerBanner(`💣 ${m}:${s}`);
+      updateTimerBanner(`${m}:${s}`);
 
-      if (challengeTimer <= 10) {
+      if (challengeTimer <= 20) {
         document.getElementById('game-view').classList.add('bomb-shake');
       }
 
@@ -1007,7 +1075,20 @@ function startChallenge(chType) {
 }
 
 function updateTimerBanner(txt) {
-  document.getElementById('game-timer').innerText = txt;
+  const container = document.getElementById('game-timer-container');
+  if (activeChallenge === 'bomb' && isChallenge) {
+    // Red Bomb Widget[cite: 1]
+    container.innerHTML = `
+      <div class="bomb-timer-widget ${challengeTimer <= 20 ? 'bomb-critical' : ''}">
+        <div class="bomb-cap"></div>
+        <div class="bomb-body">
+          <div class="bomb-display-box">${txt}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `<div class="timer-banner" id="game-timer">${txt}</div>`;
+  }
 }
 
 function exitToMenu() {
@@ -1022,6 +1103,8 @@ function exitToMenu() {
 // Year 1 Curriculum Question Builders
 function nextQuestion() {
   isAnswered = false;
+  keyboardBuffer = '';
+  clearTimeout(keyboardTimer);
   document.getElementById('msg-text').innerText = '';
   questionStartTime = Date.now();
 
@@ -1084,18 +1167,18 @@ function nextQuestion() {
   else if (mode === 'moreless') {
     document.getElementById('mode-badge').innerText = 'More / Less';
     const isMore = Math.random() > 0.5;
-    const stepChoices = [1, 1, 2, 10]; // weighted towards 1, with 2 & 10
+    const stepChoices = [1, 1, 2, 10];
     q_paramStep = stepChoices[Math.floor(Math.random() * stepChoices.length)];
 
     if (q_paramStep === 10) {
-      q_paramA = Math.floor(Math.random() * 9) + 1; // 1 to 9
-      correctAns = isMore ? q_paramA + 10 : q_paramA; // keep non-negative
+      q_paramA = Math.floor(Math.random() * 9) + 1;
+      correctAns = isMore ? q_paramA + 10 : q_paramA;
       if (!isMore) {
         q_paramA += 10;
         correctAns = q_paramA - 10;
       }
     } else if (q_paramStep === 2) {
-      q_paramA = Math.floor(Math.random() * 16) + 2; // 2 to 17
+      q_paramA = Math.floor(Math.random() * 16) + 2;
       correctAns = isMore ? q_paramA + 2 : q_paramA - 2;
     } else {
       q_paramA = Math.floor(Math.random() * 18) + 2;
@@ -1110,7 +1193,7 @@ function nextQuestion() {
     const step = [2, 5, 10][Math.floor(Math.random() * 3)];
     const start = step * (Math.floor(Math.random() * 3) + 1);
     
-    // Blank position is randomized (0, 1, 2, or 3)
+    // Blank position is randomized
     const blankIdx = Math.floor(Math.random() * 4);
     const seq = [start, start + step, start + step * 2, start + step * 3];
     correctAns = seq[blankIdx];
@@ -1394,7 +1477,6 @@ function renderKeypad() {
   } else if (q_type === 'bonds' || q_type === 'doubles' || q_type === 'make10') {
     for (let i = 0; i <= 20; i++) btnValues.push(i);
   } else if (q_type === 'moreless') {
-    // Generate close randomized distractors around the answer
     const distractors = new Set();
     distractors.add(correctAns);
     while (distractors.size < 5) {
@@ -1402,13 +1484,11 @@ function renderKeypad() {
       if (candidate >= 0) distractors.add(candidate);
     }
     btnValues = Array.from(distractors);
-    // Shuffle
     for (let i = btnValues.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [btnValues[i], btnValues[j]] = [btnValues[j], btnValues[i]];
     }
   } else if (q_type === 'skip') {
-    // Randomized distractors & Fisher-Yates Shuffle (Fixing 3rd position bug)
     const distractors = new Set();
     const stepOptions = [2, 5, 10];
     
@@ -1484,6 +1564,56 @@ function showChallengeResult(title, desc) {
   document.getElementById('res-title').innerHTML = title;
   document.getElementById('res-desc').innerHTML = desc;
   document.getElementById('result-modal').style.display = 'flex';
+}
+
+// --- PHYSICAL KEYBOARD LISTENER ---
+window.addEventListener('keydown', (e) => {
+  const gameView = document.getElementById('game-view');
+  if (!gameView || gameView.style.display !== 'block' || isAnswered) return;
+
+  // 1. Comparison keys (> , < , =)
+  if (q_type === 'compare') {
+    if (e.key === '>' || e.key === '.' || e.key === 'ArrowRight') {
+      checkAnswer('>');
+    } else if (e.key === '<' || e.key === ',' || e.key === 'ArrowLeft') {
+      checkAnswer('<');
+    } else if (e.key === '=' || e.key === 'Enter') {
+      checkAnswer('=');
+    }
+    return;
+  }
+
+  // 2. Numeric inputs (0-9, Backspace, Enter)
+  if (e.key >= '0' && e.key <= '9') {
+    keyboardBuffer += e.key;
+    const msg = document.getElementById('msg-text');
+    msg.className = 'msg-area';
+    msg.innerText = `Typing: ${keyboardBuffer}...`;
+
+    clearTimeout(keyboardTimer);
+
+    if (parseInt(keyboardBuffer, 10) >= 10 || keyboardBuffer.length >= 2) {
+      submitKeyboardAnswer();
+    } else {
+      keyboardTimer = setTimeout(() => {
+        submitKeyboardAnswer();
+      }, 700);
+    }
+  } else if (e.key === 'Enter' && keyboardBuffer.length > 0) {
+    clearTimeout(keyboardTimer);
+    submitKeyboardAnswer();
+  } else if (e.key === 'Backspace') {
+    keyboardBuffer = keyboardBuffer.slice(0, -1);
+    const msg = document.getElementById('msg-text');
+    msg.innerText = keyboardBuffer.length > 0 ? `Typing: ${keyboardBuffer}...` : '';
+  }
+});
+
+function submitKeyboardAnswer() {
+  if (!keyboardBuffer) return;
+  const val = parseInt(keyboardBuffer, 10);
+  keyboardBuffer = '';
+  checkAnswer(val);
 }
 </script>
 
