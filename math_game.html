@@ -173,7 +173,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
-    min-height: 80px;
+    min-height: 84px;
   }
   .btn-back {
     background: #e0e0e0;
@@ -200,21 +200,21 @@
     border-radius: 10px;
   }
 
-  /* --- BOMB TIMER WIDGET (WITH DYNAMIC BURNING FUSE) --- */
+  /* --- BOMB TIMER WIDGET (DYNAMIC FUSE + DIGITAL DISPLAY) --- */
   .bomb-timer-widget {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    width: 80px;
-    height: 92px;
+    width: 84px;
+    height: 94px;
   }
   .bomb-fuse-svg {
     position: absolute;
-    top: 0px;
+    top: 2px;
     left: 20px;
     width: 44px;
-    height: 30px;
+    height: 32px;
     overflow: visible;
     z-index: 1;
   }
@@ -229,27 +229,28 @@
     stroke: #8d6e63;
     stroke-width: 3.5;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s linear;
+    transition: stroke-dashoffset 0.8s linear;
   }
   .bomb-sparkle {
     position: absolute;
     font-size: 14px;
-    filter: drop-shadow(0 0 4px #ffeb3b);
+    filter: drop-shadow(0 0 5px #ffeb3b);
     animation: sparkFlicker 0.2s infinite alternate;
     pointer-events: none;
     z-index: 4;
+    transition: left 0.8s linear, top 0.8s linear;
   }
   @keyframes sparkFlicker {
     0% { transform: scale(0.9) rotate(0deg); }
-    100% { transform: scale(1.25) rotate(20deg); }
+    100% { transform: scale(1.3) rotate(20deg); }
   }
 
   .bomb-cap {
-    width: 20px;
+    width: 22px;
     height: 8px;
     background: #c62828;
     border-radius: 4px 4px 0 0;
-    margin-top: 22px;
+    margin-top: 24px;
     box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.6);
     z-index: 2;
   }
@@ -294,7 +295,7 @@
   }
   @keyframes bombPulse {
     0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff1744); }
-    100% { transform: scale(1.08); filter: drop-shadow(0 0 12px #ff1744); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 14px #ff1744); }
   }
 
   .question-box {
@@ -497,7 +498,7 @@
     font-weight: bold;
   }
 
-  /* Keyboard Dedicated Input Preview Box */
+  /* Keyboard Input Preview Box */
   .keyboard-input-preview {
     display: inline-flex;
     align-items: center;
@@ -511,7 +512,7 @@
     color: #2e7d32;
     margin-bottom: 6px;
     min-height: 28px;
-    min-width: 120px;
+    min-width: 140px;
   }
   .keyboard-input-preview.active {
     border-color: #2e7d32;
@@ -522,14 +523,13 @@
   /* Buttons */
   .options-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 360px;
+    margin: 6px auto 0 auto;
     gap: 6px;
-    margin-top: 6px;
   }
   .options-grid.compare-mode {
     grid-template-columns: repeat(3, 1fr);
-    max-width: 360px;
-    margin: 8px auto 0 auto;
   }
   .btn-opt {
     font-size: 20px;
@@ -714,7 +714,7 @@
 
       <div class="visual-area" id="visual-board"></div>
 
-      <!-- Live Keyboard Input Box -->
+      <!-- Live Input Preview Box -->
       <div id="keyboard-preview-wrap">
         <div class="keyboard-input-preview" id="keyboard-preview">Type or tap answer</div>
       </div>
@@ -1069,7 +1069,6 @@ let isDoubleQuestion = true;
 
 // Keyboard input buffer
 let keyboardBuffer = '';
-let keyboardTimer = null;
 
 const ALL_CURRICULUM_MODES = ['add10','sub10','make10','bonds','doubles','moreless','skip','compare'];
 
@@ -1137,39 +1136,60 @@ function startChallenge(chType) {
   nextQuestion();
 }
 
-// UPDATE TIMER WIDGET (DYNAMIC FUSE LENGTH CALCULATED)
+// UPDATE TIMER WIDGET (DYNAMIC CLOCK TICKING + FUSE CONSUMPTION)
 function updateTimerBanner(txt) {
   const container = document.getElementById('game-timer-container');
   if (activeChallenge === 'bomb' && isChallenge) {
-    // 總時間 600 秒，計算藥引剩餘長度 (SVG Path 總長約 52)
-    const totalSec = 600;
-    const progress = Math.max(0, Math.min(1, challengeTimer / totalSec));
-    const pathTotalLen = 52;
-    // 隨時間縮短: offset 從 0 變為 52
-    const strokeOffset = ((1 - progress) * pathTotalLen).toFixed(1);
+    let widget = document.getElementById('bomb-widget');
 
-    // 火花位置順著曲線從起點 (0px, 0px) 移動到炸彈帽 (22px, 20px)
-    const sparkX = (2 + (1 - progress) * 18).toFixed(1);
-    const sparkY = (0 + (1 - progress) * 16).toFixed(1);
-
-    container.innerHTML = `
-      <div class="bomb-timer-widget ${challengeTimer <= 20 ? 'bomb-critical' : ''}">
-        <!-- Dynamic Burning Fuse -->
-        <svg class="bomb-fuse-svg" viewBox="0 0 44 30">
-          <path class="bomb-fuse-track" d="M 4 2 Q 22 2, 22 24" />
-          <path class="bomb-fuse-burn" d="M 4 2 Q 22 2, 22 24"
-                stroke-dasharray="52"
-                stroke-dashoffset="${strokeOffset}" />
-        </svg>
-        <!-- Burning Spark Sparkle -->
-        <div class="bomb-sparkle" style="left: ${sparkX}px; top: ${sparkY}px;">✨🔥</div>
-
-        <div class="bomb-cap"></div>
-        <div class="bomb-body">
-          <div class="bomb-display-box">${txt}</div>
+    // 建立一次炸彈結構，避免每秒重繪 DOM 打斷過渡動畫
+    if (!widget) {
+      container.innerHTML = `
+        <div id="bomb-widget" class="bomb-timer-widget">
+          <svg class="bomb-fuse-svg" viewBox="0 0 44 32">
+            <!-- 灰色底繩 (標示原始路徑) -->
+            <path d="M 4 2 Q 22 2, 22 26" class="bomb-fuse-track" />
+            <!-- 燃燒縮短的深色藥引 -->
+            <path id="bomb-fuse-path" d="M 4 2 Q 22 2, 22 26" class="bomb-fuse-burn" stroke-dasharray="52" stroke-dashoffset="0" />
+          </svg>
+          <div id="bomb-spark" class="bomb-sparkle">✨🔥</div>
+          <div class="bomb-cap"></div>
+          <div class="bomb-body">
+            <div id="bomb-digits" class="bomb-display-box">${txt}</div>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+      widget = document.getElementById('bomb-widget');
+    }
+
+    // 1. 即時刷新數碼時間字串
+    const digits = document.getElementById('bomb-digits');
+    if (digits) digits.innerText = txt;
+
+    // 2. 計算藥引縮短比例與火花沿曲線移動
+    const totalSec = 600;
+    const fusePath = document.getElementById('bomb-fuse-path');
+    const spark = document.getElementById('bomb-spark');
+
+    if (fusePath && spark) {
+      const totalLen = fusePath.getTotalLength ? fusePath.getTotalLength() : 52;
+      const ratio = Math.max(0, Math.min(1, challengeTimer / totalSec));
+      const burnedLen = (1 - ratio) * totalLen;
+      fusePath.style.strokeDashoffset = burnedLen;
+
+      if (fusePath.getPointAtLength) {
+        const pt = fusePath.getPointAtLength(burnedLen);
+        spark.style.left = (pt.x + 14) + 'px';
+        spark.style.top = (pt.y - 6) + 'px';
+      }
+    }
+
+    // 3. 最後 20 秒狂震及閃爍
+    if (challengeTimer <= 20) {
+      widget.classList.add('bomb-critical');
+    } else {
+      widget.classList.remove('bomb-critical');
+    }
   } else {
     container.innerHTML = `<div class="timer-banner" id="game-timer">${txt}</div>`;
   }
@@ -1178,6 +1198,7 @@ function updateTimerBanner(txt) {
 function exitToMenu() {
   playPop();
   clearInterval(challengeInterval);
+  document.getElementById('game-timer-container').innerHTML = ''; // 清理炸彈 DOM
   document.getElementById('game-view').classList.remove('bomb-shake');
   document.getElementById('game-view').style.display = 'none';
   document.getElementById('menu-view').style.display = 'block';
@@ -1188,7 +1209,6 @@ function exitToMenu() {
 function nextQuestion() {
   isAnswered = false;
   keyboardBuffer = '';
-  clearTimeout(keyboardTimer);
   updateKeyboardPreview();
   document.getElementById('msg-text').innerText = '';
   questionStartTime = Date.now();
@@ -1278,7 +1298,6 @@ function nextQuestion() {
     const step = [2, 5, 10][Math.floor(Math.random() * 3)];
     const start = step * (Math.floor(Math.random() * 3) + 1);
     
-    // Blank position is randomized
     const blankIdx = Math.floor(Math.random() * 4);
     const seq = [start, start + step, start + step * 2, start + step * 3];
     correctAns = seq[blankIdx];
@@ -1540,14 +1559,15 @@ function renderQuestionVisual() {
 function updateKeyboardPreview() {
   const el = document.getElementById('keyboard-preview');
   if (keyboardBuffer.length > 0) {
-    el.innerText = `Typing: ${keyboardBuffer} (Press Enter ↵)`;
+    el.innerText = `Typing: ${keyboardBuffer}  ➔  [Press Enter ↵]`;
     el.classList.add('active');
   } else {
-    el.innerText = `Keyboard or Screen Keypad Ready`;
+    el.innerText = `Type / tap number ➔ OK ↵`;
     el.classList.remove('active');
   }
 }
 
+// 12-KEY KEYPAD (CALCULATOR STYLE)
 function renderKeypad() {
   const box = document.getElementById('options-box');
   box.innerHTML = '';
@@ -1566,48 +1586,43 @@ function renderKeypad() {
   }
 
   box.className = 'options-grid';
-  let btnValues = [];
+  const keypadLayout = [
+    '1', '2', '3', '4',
+    '5', '6', '7', '8',
+    '9', '0', '⌫', 'OK ↵'
+  ];
 
-  if (q_type === 'add10' || q_type === 'sub10') {
-    btnValues = [0,1,2,3,4,5,6,7,8,9,10];
-  } else if (q_type === 'bonds' || q_type === 'doubles' || q_type === 'make10') {
-    for (let i = 0; i <= 20; i++) btnValues.push(i);
-  } else if (q_type === 'moreless') {
-    const distractors = new Set();
-    distractors.add(correctAns);
-    while (distractors.size < 5) {
-      const candidate = correctAns + (Math.floor(Math.random() * 7) - 3);
-      if (candidate >= 0) distractors.add(candidate);
-    }
-    btnValues = Array.from(distractors);
-    for (let i = btnValues.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [btnValues[i], btnValues[j]] = [btnValues[j], btnValues[i]];
-    }
-  } else if (q_type === 'skip') {
-    const distractors = new Set();
-    const stepOptions = [2, 5, 10];
-    
-    while (distractors.size < 4) {
-      const offset = (Math.random() > 0.5 ? 1 : -1) * (stepOptions[Math.floor(Math.random() * stepOptions.length)]);
-      const candidate = correctAns + offset;
-      if (candidate > 0 && candidate !== correctAns) {
-        distractors.add(candidate);
-      }
-    }
-    
-    btnValues = [correctAns, ...distractors];
-    for (let i = btnValues.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [btnValues[i], btnValues[j]] = [btnValues[j], btnValues[i]];
-    }
-  }
-
-  btnValues.forEach(val => {
+  keypadLayout.forEach(key => {
     const b = document.createElement('button');
     b.className = 'btn-opt';
-    b.innerText = val;
-    b.onclick = () => checkAnswer(val);
+    b.innerText = key;
+
+    if (key === '⌫') {
+      b.style.background = '#ffb74d';
+      b.style.boxShadow = '0 3px 0 #f57c00';
+      b.onclick = () => {
+        playPop();
+        keyboardBuffer = keyboardBuffer.slice(0, -1);
+        updateKeyboardPreview();
+      };
+    } else if (key === 'OK ↵') {
+      b.style.background = '#2e7d32';
+      b.style.boxShadow = '0 3px 0 #1b5e20';
+      b.style.fontSize = '16px';
+      b.onclick = () => {
+        playPop();
+        submitKeyboardAnswer();
+      };
+    } else {
+      b.onclick = () => {
+        playPop();
+        if (keyboardBuffer.length < 3) {
+          keyboardBuffer += key;
+          updateKeyboardPreview();
+        }
+      };
+    }
+
     box.appendChild(b);
   });
 }
@@ -1662,7 +1677,7 @@ function showChallengeResult(title, desc) {
   document.getElementById('result-modal').style.display = 'flex';
 }
 
-// --- PHYSICAL KEYBOARD LISTENER WITH LIVE VISUAL PREVIEW & ENTER CONFIRMATION ---
+// --- PHYSICAL KEYBOARD LISTENER (MANUAL ENTER CONFIRMATION) ---
 window.addEventListener('keydown', (e) => {
   const gameView = document.getElementById('game-view');
   if (!gameView || gameView.style.display !== 'block' || isAnswered) return;
@@ -1679,31 +1694,22 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
-  // 2. Numeric inputs (0-9)
+  // 2. Numeric inputs (0-9) - 停在格仔等待小朋友按 Enter
   if (e.key >= '0' && e.key <= '9') {
-    // 限制最多輸入 3 位數，避免無限堆疊
     if (keyboardBuffer.length < 3) {
       keyboardBuffer += e.key;
       updateKeyboardPreview();
-
-      clearTimeout(keyboardTimer);
-      // 若打了兩位數且停頓 800ms，亦會自動確認
-      keyboardTimer = setTimeout(() => {
-        submitKeyboardAnswer();
-      }, 800);
     }
   } 
-  // 3. 按 Enter 鍵立即確認提交
+  // 3. 按 Enter 鍵才正式核對答案
   else if (e.key === 'Enter') {
     if (keyboardBuffer.length > 0) {
-      clearTimeout(keyboardTimer);
       submitKeyboardAnswer();
     }
   } 
-  // 4. 按 Backspace 刪除打錯的數字
+  // 4. 按 Backspace 刪除
   else if (e.key === 'Backspace') {
     keyboardBuffer = keyboardBuffer.slice(0, -1);
-    clearTimeout(keyboardTimer);
     updateKeyboardPreview();
   }
 });
