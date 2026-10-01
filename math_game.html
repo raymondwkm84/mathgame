@@ -173,6 +173,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+    min-height: 80px;
   }
   .btn-back {
     background: #e0e0e0;
@@ -199,28 +200,62 @@
     border-radius: 10px;
   }
 
-  /* --- MISSION RED BOMB TIMER (PICTURE MATCH) --- */
+  /* --- BOMB TIMER WIDGET (WITH DYNAMIC BURNING FUSE) --- */
   .bomb-timer-widget {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     position: relative;
-    width: 66px;
-    height: 72px;
+    width: 80px;
+    height: 92px;
   }
+  .bomb-fuse-svg {
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    width: 44px;
+    height: 30px;
+    overflow: visible;
+    z-index: 1;
+  }
+  .bomb-fuse-track {
+    fill: none;
+    stroke: #d7ccc8;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+  }
+  .bomb-fuse-burn {
+    fill: none;
+    stroke: #8d6e63;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s linear;
+  }
+  .bomb-sparkle {
+    position: absolute;
+    font-size: 14px;
+    filter: drop-shadow(0 0 4px #ffeb3b);
+    animation: sparkFlicker 0.2s infinite alternate;
+    pointer-events: none;
+    z-index: 4;
+  }
+  @keyframes sparkFlicker {
+    0% { transform: scale(0.9) rotate(0deg); }
+    100% { transform: scale(1.25) rotate(20deg); }
+  }
+
   .bomb-cap {
     width: 20px;
     height: 8px;
     background: #c62828;
-    border-radius: 5px 5px 0 0;
+    border-radius: 4px 4px 0 0;
+    margin-top: 22px;
     box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.6);
-    margin-bottom: -2px;
     z-index: 2;
   }
   .bomb-body {
-    width: 64px;
-    height: 64px;
+    width: 62px;
+    height: 62px;
     background: radial-gradient(circle at 35% 30%, #ff5252, #e53935 48%, #b71c1c 90%);
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 3px 5px rgba(255, 255, 255, 0.6);
@@ -228,14 +263,15 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    z-index: 2;
   }
   .bomb-body::before {
     content: '';
     position: absolute;
     top: 5px;
     left: 10px;
-    width: 24px;
-    height: 12px;
+    width: 22px;
+    height: 11px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
     transform: rotate(-30deg);
@@ -245,8 +281,8 @@
     color: #ffffff;
     font-family: 'Courier New', Courier, monospace, sans-serif;
     font-weight: 900;
-    font-size: 14px;
-    padding: 2px 6px;
+    font-size: 13px;
+    padding: 2px 5px;
     border-radius: 4px;
     border: 1.5px solid #222222;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.9);
@@ -258,7 +294,7 @@
   }
   @keyframes bombPulse {
     0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff1744); }
-    100% { transform: scale(1.1); filter: drop-shadow(0 0 12px #ff1744); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 12px #ff1744); }
   }
 
   .question-box {
@@ -461,6 +497,28 @@
     font-weight: bold;
   }
 
+  /* Keyboard Dedicated Input Preview Box */
+  .keyboard-input-preview {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f8e9;
+    border: 2px solid #81c784;
+    border-radius: 12px;
+    padding: 4px 14px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 6px;
+    min-height: 28px;
+    min-width: 120px;
+  }
+  .keyboard-input-preview.active {
+    border-color: #2e7d32;
+    background: #e8f5e9;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+  }
+
   /* Buttons */
   .options-grid {
     display: grid;
@@ -492,7 +550,7 @@
   }
   .btn-opt:active { transform: translateY(2px); box-shadow: none; }
   .btn-opt:disabled { opacity: 0.5; cursor: not-allowed; }
-  .msg-area { min-height: 32px; font-size: 18px; font-weight: bold; margin-top: 6px; }
+  .msg-area { min-height: 30px; font-size: 17px; font-weight: bold; margin-top: 4px; }
 
   /* Modals */
   .modal-overlay {
@@ -655,6 +713,11 @@
       <div class="instructions" id="hint-text">Instructions</div>
 
       <div class="visual-area" id="visual-board"></div>
+
+      <!-- Live Keyboard Input Box -->
+      <div id="keyboard-preview-wrap">
+        <div class="keyboard-input-preview" id="keyboard-preview">Type or tap answer</div>
+      </div>
 
       <div id="options-box" class="options-grid"></div>
       <div class="msg-area" id="msg-text"></div>
@@ -1074,12 +1137,33 @@ function startChallenge(chType) {
   nextQuestion();
 }
 
+// UPDATE TIMER WIDGET (DYNAMIC FUSE LENGTH CALCULATED)
 function updateTimerBanner(txt) {
   const container = document.getElementById('game-timer-container');
   if (activeChallenge === 'bomb' && isChallenge) {
-    // Red Bomb Widget[cite: 1]
+    // 總時間 600 秒，計算藥引剩餘長度 (SVG Path 總長約 52)
+    const totalSec = 600;
+    const progress = Math.max(0, Math.min(1, challengeTimer / totalSec));
+    const pathTotalLen = 52;
+    // 隨時間縮短: offset 從 0 變為 52
+    const strokeOffset = ((1 - progress) * pathTotalLen).toFixed(1);
+
+    // 火花位置順著曲線從起點 (0px, 0px) 移動到炸彈帽 (22px, 20px)
+    const sparkX = (2 + (1 - progress) * 18).toFixed(1);
+    const sparkY = (0 + (1 - progress) * 16).toFixed(1);
+
     container.innerHTML = `
       <div class="bomb-timer-widget ${challengeTimer <= 20 ? 'bomb-critical' : ''}">
+        <!-- Dynamic Burning Fuse -->
+        <svg class="bomb-fuse-svg" viewBox="0 0 44 30">
+          <path class="bomb-fuse-track" d="M 4 2 Q 22 2, 22 24" />
+          <path class="bomb-fuse-burn" d="M 4 2 Q 22 2, 22 24"
+                stroke-dasharray="52"
+                stroke-dashoffset="${strokeOffset}" />
+        </svg>
+        <!-- Burning Spark Sparkle -->
+        <div class="bomb-sparkle" style="left: ${sparkX}px; top: ${sparkY}px;">✨🔥</div>
+
         <div class="bomb-cap"></div>
         <div class="bomb-body">
           <div class="bomb-display-box">${txt}</div>
@@ -1105,6 +1189,7 @@ function nextQuestion() {
   isAnswered = false;
   keyboardBuffer = '';
   clearTimeout(keyboardTimer);
+  updateKeyboardPreview();
   document.getElementById('msg-text').innerText = '';
   questionStartTime = Date.now();
 
@@ -1452,6 +1537,17 @@ function renderQuestionVisual() {
   }
 }
 
+function updateKeyboardPreview() {
+  const el = document.getElementById('keyboard-preview');
+  if (keyboardBuffer.length > 0) {
+    el.innerText = `Typing: ${keyboardBuffer} (Press Enter ↵)`;
+    el.classList.add('active');
+  } else {
+    el.innerText = `Keyboard or Screen Keypad Ready`;
+    el.classList.remove('active');
+  }
+}
+
 function renderKeypad() {
   const box = document.getElementById('options-box');
   box.innerHTML = '';
@@ -1566,7 +1662,7 @@ function showChallengeResult(title, desc) {
   document.getElementById('result-modal').style.display = 'flex';
 }
 
-// --- PHYSICAL KEYBOARD LISTENER ---
+// --- PHYSICAL KEYBOARD LISTENER WITH LIVE VISUAL PREVIEW & ENTER CONFIRMATION ---
 window.addEventListener('keydown', (e) => {
   const gameView = document.getElementById('game-view');
   if (!gameView || gameView.style.display !== 'block' || isAnswered) return;
@@ -1583,29 +1679,32 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
-  // 2. Numeric inputs (0-9, Backspace, Enter)
+  // 2. Numeric inputs (0-9)
   if (e.key >= '0' && e.key <= '9') {
-    keyboardBuffer += e.key;
-    const msg = document.getElementById('msg-text');
-    msg.className = 'msg-area';
-    msg.innerText = `Typing: ${keyboardBuffer}...`;
+    // 限制最多輸入 3 位數，避免無限堆疊
+    if (keyboardBuffer.length < 3) {
+      keyboardBuffer += e.key;
+      updateKeyboardPreview();
 
-    clearTimeout(keyboardTimer);
-
-    if (parseInt(keyboardBuffer, 10) >= 10 || keyboardBuffer.length >= 2) {
-      submitKeyboardAnswer();
-    } else {
+      clearTimeout(keyboardTimer);
+      // 若打了兩位數且停頓 800ms，亦會自動確認
       keyboardTimer = setTimeout(() => {
         submitKeyboardAnswer();
-      }, 700);
+      }, 800);
     }
-  } else if (e.key === 'Enter' && keyboardBuffer.length > 0) {
-    clearTimeout(keyboardTimer);
-    submitKeyboardAnswer();
-  } else if (e.key === 'Backspace') {
+  } 
+  // 3. 按 Enter 鍵立即確認提交
+  else if (e.key === 'Enter') {
+    if (keyboardBuffer.length > 0) {
+      clearTimeout(keyboardTimer);
+      submitKeyboardAnswer();
+    }
+  } 
+  // 4. 按 Backspace 刪除打錯的數字
+  else if (e.key === 'Backspace') {
     keyboardBuffer = keyboardBuffer.slice(0, -1);
-    const msg = document.getElementById('msg-text');
-    msg.innerText = keyboardBuffer.length > 0 ? `Typing: ${keyboardBuffer}...` : '';
+    clearTimeout(keyboardTimer);
+    updateKeyboardPreview();
   }
 });
 
@@ -1613,6 +1712,7 @@ function submitKeyboardAnswer() {
   if (!keyboardBuffer) return;
   const val = parseInt(keyboardBuffer, 10);
   keyboardBuffer = '';
+  updateKeyboardPreview();
   checkAnswer(val);
 }
 </script>
