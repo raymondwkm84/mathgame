@@ -3,160 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino Math Adventure</title>
+<title>Dino Year 1 Math Adventure</title>
 <style>
   body {
     font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
     background-color: #f4f9f4;
     text-align: center;
     margin: 0;
-    padding: 15px;
+    padding: 12px;
     user-select: none;
     overflow-x: hidden;
   }
   .container {
-    max-width: 520px;
+    max-width: 540px;
     margin: auto;
     background: white;
-    padding: 20px;
+    padding: 18px;
     border-radius: 24px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     position: relative;
+    min-height: 580px;
   }
-  h1 { font-size: 26px; color: #2e7d32; margin: 0 0 10px 0; }
+  h1 { font-size: 24px; color: #2e7d32; margin: 0 0 8px 0; }
 
-  /* Status Bar */
+  /* Login Panel */
+  #login-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 10px;
+  }
+  .login-input {
+    width: 80%;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: 16px;
+    border: 2px solid #a5d6a7;
+    border-radius: 12px;
+    outline: none;
+  }
+  .login-btn {
+    width: 85%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+
+  /* Status Dashboard */
   .status-header {
+    background: #e8f5e9;
+    padding: 8px 12px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #1b5e20;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .status-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #e8f5e9;
-    padding: 10px 14px;
-    border-radius: 16px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #1b5e20;
-    gap: 6px;
   }
-  .score-col {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 3px;
-  }
-  .score-pill {
+  .badge-pill {
     background: #ffffff;
-    padding: 2px 8px;
+    padding: 3px 8px;
     border-radius: 10px;
     border: 1px solid #c8e6c9;
-    font-size: 13px;
   }
   .coin-badge {
     color: #d35400;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
     background: #fff3e0;
-    padding: 5px 9px;
-    border-radius: 12px;
     border: 1px solid #ffe0b2;
-    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    cursor: pointer;
   }
-  .timer-badge {
-    color: #2980b9;
-    background: #e1f5fe;
-    padding: 5px 9px;
-    border-radius: 12px;
-    border: 1px solid #b3e5fc;
+  .user-badge {
+    color: #2e7d32;
     font-size: 14px;
   }
 
-  /* Mascot Display */
+  /* Mascot Display with Hat layer */
   .dino-avatar-wrap {
     position: relative;
     display: inline-block;
-    font-size: 42px;
+    font-size: 38px;
     line-height: 1;
+    margin: 0 4px;
   }
   .dino-hat-layer {
     position: absolute;
-    top: -18px;
-    left: 8px;
-    font-size: 22px;
+    top: -16px;
+    left: 6px;
+    font-size: 20px;
+    pointer-events: none;
   }
 
-  /* Daily Progress Bar */
-  .progress-wrap {
-    background: #f1f2f6;
-    border-radius: 12px;
-    height: 16px;
-    width: 100%;
-    margin-bottom: 12px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  }
-  .progress-bar {
-    background: linear-gradient(90deg, #4caf50, #8bc34a);
-    height: 100%;
-    width: 0%;
-    transition: width 0.4s ease;
-  }
-  .progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 11px;
+  /* Menu Layout */
+  #menu-view { display: none; }
+  .section-label {
+    text-align: left;
+    font-size: 13px;
     font-weight: bold;
-    color: #333;
+    color: #666;
+    margin: 10px 0 4px 4px;
+    text-transform: uppercase;
   }
-
-  /* Menu Styles */
-  #menu-view { display: block; }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
   .menu-btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0;
-    font-size: 18px;
+    padding: 12px 8px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
-    border-radius: 16px;
+    border-radius: 14px;
     cursor: pointer;
     color: white;
-    text-align: left;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+    text-align: center;
     transition: all 0.1s;
   }
-  .menu-btn:active { transform: translateY(3px); box-shadow: none; }
-  .btn-mode-1 { background: #4caf50; }
-  .btn-mode-2 { background: #ff9800; }
-  .btn-mode-3 { background: #e91e63; }
-  .btn-mode-4 { background: #673ab7; }
+  .menu-btn:active { transform: translateY(2px); box-shadow: none; }
+  
+  .btn-c-1 { background: #4caf50; }
+  .btn-c-2 { background: #ff9800; }
+  .btn-c-3 { background: #e91e63; }
+  .btn-c-4 { background: #3f51b5; }
+  .btn-c-5 { background: #009688; }
+  .btn-c-6 { background: #795548; }
+  .btn-c-7 { background: #9c27b0; }
+  .btn-c-8 { background: #0288d1; }
+  .btn-c-9 { background: #607d8b; }
+  .btn-challenge { background: #d32f2f; }
 
-  .settings-row {
+  .bottom-tools {
     display: flex;
     justify-content: space-around;
     margin-top: 15px;
-    font-weight: bold;
-    color: #555;
-    font-size: 14px;
+    gap: 8px;
   }
-  .btn-shop {
-    background: #f39c12;
-    color: white;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 14px;
+  .btn-tool {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 14px;
     font-weight: bold;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 3px 0 #d68910;
+    color: white;
   }
 
-  /* Game View Styles */
+  /* Game View */
   #game-view { display: none; }
   .top-bar {
     display: flex;
@@ -167,36 +177,45 @@
   .btn-back {
     background: #e0e0e0;
     border: none;
-    padding: 8px 14px;
-    border-radius: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
   }
   .mode-badge {
+    font-size: 13px;
+    font-weight: bold;
+    color: #444;
+    background: #f1f2f6;
+    padding: 4px 10px;
+    border-radius: 10px;
+  }
+  .timer-banner {
     font-size: 14px;
     font-weight: bold;
-    color: #555;
-    background: #f1f2f6;
-    padding: 5px 12px;
-    border-radius: 12px;
+    color: #d32f2f;
+    background: #ffebee;
+    padding: 4px 10px;
+    border-radius: 10px;
   }
+
   .question-box {
-    font-size: 38px;
+    font-size: 34px;
     font-weight: bold;
     color: #1b5e20;
-    margin: 8px 0;
+    margin: 6px 0;
     background: #e8f5e9;
-    padding: 6px 20px;
-    border-radius: 16px;
+    padding: 6px 18px;
+    border-radius: 14px;
     display: inline-block;
   }
-  .instructions { color: #43a047; font-size: 16px; margin-bottom: 10px; font-weight: bold; min-height: 22px; }
+  .instructions { color: #43a047; font-size: 14px; margin-bottom: 8px; font-weight: bold; min-height: 20px; }
 
-  /* Visual Board */
+  /* Visual Container */
   .visual-area {
-    min-height: 130px;
-    margin: 12px 0;
-    padding: 12px;
+    min-height: 120px;
+    margin: 10px 0;
+    padding: 10px;
     background: #fffde7;
     border-radius: 16px;
     border: 2px dashed #ffd54f;
@@ -204,51 +223,137 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
-  /* 5-in-a-row Grid */
+  /* 5-in-a-row layout */
   .grid-5-group {
     display: grid;
-    grid-template-columns: repeat(5, 52px);
-    gap: 8px;
+    grid-template-columns: repeat(5, 48px);
+    gap: 6px;
     justify-content: center;
-    margin-top: 5px;
   }
   .grid-item-cell {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     background: #ffffff;
     border: 2px solid #a5d6a7;
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 32px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-size: 28px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .grid-item-cell.eaten {
     opacity: 0.15;
-    transform: scale(0.65);
+    transform: scale(0.6);
     filter: grayscale(100%);
-    background: #f1f2f6;
-    border-color: #dcdde1;
+    background: #eee;
   }
 
-  /* 10-Frame */
-  .ten-frame-container {
+  /* Double Mirror Visual */
+  .mirror-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .mirror-panel {
+    background: #ffffff;
+    border: 2px solid #80cbc4;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 100px;
+  }
+  .mirror-divider {
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #009688;
+    font-weight: bold;
+  }
+
+  /* Half Fair-Share Visual */
+  .halves-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     width: 100%;
   }
+  .halves-pool {
+    background: rgba(233, 30, 99, 0.08);
+    border: 1px dashed #e91e63;
+    border-radius: 12px;
+    padding: 6px 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 44px;
+  }
+  .halves-trays-wrap {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 8px;
+  }
+  .halves-tray {
+    flex: 1;
+    background: #ffffff;
+    border: 2px solid #ffb74d;
+    border-radius: 12px;
+    padding: 6px;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .halves-tray-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  /* Comparison Two Panels Container */
+  .compare-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    gap: 8px;
+  }
+  .compare-panel {
+    background: white;
+    border: 2px solid #b3e5fc;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 110px;
+  }
+  .compare-panel-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #0288d1;
+    margin-bottom: 4px;
+  }
+
+  /* Ten Frame */
+  .ten-frame-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
   .ten-frame {
     display: grid;
-    grid-template-columns: repeat(5, 48px);
-    grid-template-rows: repeat(2, 48px);
+    grid-template-columns: repeat(5, 46px);
+    grid-template-rows: repeat(2, 46px);
     gap: 4px;
     background: #ffffff;
     padding: 6px;
@@ -261,65 +366,71 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 28px;
-    min-height: 48px;
+    font-size: 26px;
   }
   .frame-cell.filled { background: #fff8e1; }
-
   .outside-tray-grid {
     display: grid;
-    grid-template-columns: repeat(5, 48px);
+    grid-template-columns: repeat(5, 46px);
     gap: 6px;
-    justify-content: center;
-    min-height: 48px;
-    padding: 6px 10px;
-    border-radius: 12px;
+    padding: 4px 8px;
     background: rgba(255, 152, 0, 0.12);
+    border-radius: 10px;
     border: 1px dashed #ffa726;
-    margin-top: 4px;
   }
   .clickable-star {
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
-    font-size: 32px;
+    width: 46px;
+    height: 46px;
+    font-size: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.15s ease;
+    cursor: pointer;
   }
 
-  /* Keypad Buttons */
-  .options-title { font-size: 15px; color: #555; margin-top: 8px; }
+  /* Mental Box */
+  .mental-box {
+    background: #ffffff;
+    border: 2px dashed #b0bec5;
+    border-radius: 14px;
+    padding: 16px;
+    color: #78909c;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  /* Buttons */
   .options-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .options-grid.compare-mode {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 360px;
+    margin: 8px auto 0 auto;
   }
   .btn-opt {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
-    padding: 10px 0;
+    padding: 8px 0;
     background: #81c784;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     color: white;
     cursor: pointer;
-    box-shadow: 0 4px 0 #4caf50;
-    transition: all 0.1s;
+    box-shadow: 0 3px 0 #4caf50;
   }
-  .btn-opt:active { transform: translateY(3px); box-shadow: 0 1px 0 #4caf50; }
-  .btn-opt:disabled { opacity: 0.6; cursor: not-allowed; }
-
-  .msg-area {
-    min-height: 38px;
-    font-size: 19px;
-    font-weight: bold;
-    margin-top: 8px;
+  .btn-opt.btn-compare {
+    font-size: 32px;
+    padding: 12px 0;
+    background: #0288d1;
+    box-shadow: 0 4px 0 #0277bd;
   }
-  .success { color: #2e7d32; }
-  .retry { color: #e65100; }
+  .btn-opt:active { transform: translateY(2px); box-shadow: none; }
+  .btn-opt:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg-area { min-height: 32px; font-size: 18px; font-weight: bold; margin-top: 6px; }
 
   /* Modals */
   .modal-overlay {
@@ -334,46 +445,74 @@
   .modal-box {
     background: white;
     width: 90%;
-    max-width: 420px;
-    padding: 24px 20px;
+    max-width: 440px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
     border-radius: 24px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
-  .shop-item-grid {
+
+  /* Shop Grid */
+  .shop-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin: 15px 0;
+    gap: 10px;
+    margin: 12px 0;
   }
   .shop-card {
     border: 2px solid #eee;
-    border-radius: 14px;
-    padding: 10px;
+    border-radius: 12px;
+    padding: 8px;
     background: #fafafa;
   }
   .shop-card.owned { border-color: #27ae60; background: #e8f8f5; }
-  .shop-buy-btn {
+  .shop-btn {
+    width: 100%;
+    padding: 6px 0;
+    margin-top: 5px;
     border: none;
-    padding: 6px 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 6px;
-    width: 100%;
   }
   .btn-buy { background: #f39c12; color: white; }
-  .btn-equip { background: #27ae60; color: white; }
+  .btn-wear { background: #27ae60; color: white; }
 
-  /* Confetti Canvas */
+  /* Analytics Table */
+  .stat-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+    margin: 8px 0;
+    text-align: left;
+    font-size: 14px;
+  }
+  .stat-highlight {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2e7d32;
+  }
+
+  /* Bomb Animation */
+  .bomb-shake {
+    animation: shake 0.5s infinite;
+  }
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-2px, -1px) rotate(-2deg); }
+    40% { transform: translate(2px, 0px) rotate(2deg); }
+    60% { transform: translate(-1px, 2px) rotate(0deg); }
+    80% { transform: translate(2px, 1px) rotate(1deg); }
+    100% { transform: translate(1px, -1px) rotate(-1deg); }
+  }
+
   #confetti-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 999;
+    z-index: 9999;
   }
 </style>
 </head>
@@ -382,145 +521,174 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div class="container">
-  <!-- STATUS HEADER -->
-  <div class="status-header">
-    <div class="score-col">
-      <div class="score-pill">🌟 Today: <span id="today-score">0</span></div>
-      <div class="score-pill">🏆 Total: <span id="total-score">0</span></div>
-    </div>
-    <div class="dino-avatar-wrap">
-      <div class="dino-hat-layer" id="equipped-hat"></div>
-      🦖
-    </div>
-    <div class="coin-badge" onclick="openShop()">🪙 <span id="coin-count">0</span></div>
-    <div class="timer-badge" id="timer-box">⏱️ 00:00</div>
+  <!-- 1. LOGIN SCREEN -->
+  <div id="login-view">
+    <div style="font-size: 55px;">🦖📚</div>
+    <h1>Dino Math Login</h1>
+    <div style="color: #666; margin-bottom: 15px;">Login to save your scores and hats!</div>
+    <input type="text" id="login-user" class="login-input" placeholder="Student Name (e.g. Alex)">
+    <input type="password" id="login-pass" class="login-input" placeholder="Password (any simple pin)">
+    <button class="login-btn" onclick="handleLogin()">Login / Start ➔</button>
   </div>
 
-  <!-- PROGRESS BAR TOWARDS 30 QUESTIONS -->
-  <div class="progress-wrap">
-    <div class="progress-bar" id="daily-bar"></div>
-    <div class="progress-text" id="daily-text">Daily Goal: 0 / 30</div>
-  </div>
-
-  <!-- MENU VIEW -->
-  <div id="menu-view">
-    <h1>🦖 Dino Math Quest!</h1>
-    <div style="color: #666; margin-bottom: 15px;">Pick a game mode to start:</div>
-    <button class="menu-btn btn-mode-1" onclick="selectMode(1)">1. Addition (Up to 10) ➔</button>
-    <button class="menu-btn btn-mode-2" onclick="selectMode(2)">2. Make 10 Addition (11-20) ➔</button>
-    <button class="menu-btn btn-mode-3" onclick="selectMode(3)">3. Dino Subtraction (Within 10) ➔</button>
-    <button class="menu-btn btn-mode-4" onclick="selectMode(4)">4. Mixed Practice Challenge ➔</button>
-
-    <div class="settings-row">
-      <label><input type="checkbox" id="timer-toggle" checked onchange="toggleTimerSetting()"> Enable Timer</label>
-      <button class="btn-shop" onclick="openShop()">🛒 Dino Shop</button>
-    </div>
-  </div>
-
-  <!-- GAMEPLAY VIEW -->
-  <div id="game-view">
-    <div class="top-bar">
-      <button class="btn-back" onclick="goToMenu()">◀ Menu</button>
-      <div class="mode-badge" id="mode-badge">Mode</div>
+  <!-- 2. MAIN HEADER -->
+  <div id="app-content" style="display: none;">
+    <div class="status-header">
+      <div class="status-row">
+        <div class="user-badge">👤 <span id="display-user">Kid</span></div>
+        <div class="dino-avatar-wrap">
+          <div class="dino-hat-layer" id="equipped-hat"></div>
+          🦖
+        </div>
+        <div class="coin-badge" onclick="openShop()">
+          🪙 Today: <span id="today-coins">0</span> | Total: <span id="total-coins">0</span>
+        </div>
+      </div>
+      <div class="status-row">
+        <div class="badge-pill">🌟 Today Qs: <span id="today-score">0</span></div>
+        <div class="badge-pill">🏆 Total Qs: <span id="total-score">0</span></div>
+        <button onclick="handleLogout()" style="background: none; border: none; font-size: 11px; color: #888; cursor: pointer;">Logout</button>
+      </div>
     </div>
 
-    <div class="question-box" id="question">7 - 3 = ?</div>
-    <div class="instructions" id="hint-text">Instructions appear here</div>
+    <!-- 3. MENU VIEW -->
+    <div id="menu-view">
+      <div class="section-label">🇬🇧 UK Year 1 Curriculum Practice</div>
+      <div class="menu-grid">
+        <button class="menu-btn btn-c-1" onclick="startMode('add10')">1. Addition ≤ 10</button>
+        <button class="menu-btn btn-c-2" onclick="startMode('sub10')">2. Dino Subtraction ≤ 10</button>
+        <button class="menu-btn btn-c-3" onclick="startMode('make10')">3. Make 10 Addition (11-20)</button>
+        <button class="menu-btn btn-c-4" onclick="startMode('bonds')">4. Number Bonds (10 & 20)</button>
+        <button class="menu-btn btn-c-5" onclick="startMode('doubles')">5. Doubles & Halves</button>
+        <button class="menu-btn btn-c-6" onclick="startMode('moreless')">6. More / Less (±1, ±2, ±10)</button>
+        <button class="menu-btn btn-c-7" onclick="startMode('skip')">7. Skip Counting (2, 5, 10)</button>
+        <button class="menu-btn btn-c-8" onclick="startMode('compare')">8. Compare (&gt;, &lt;, =)</button>
+        <button class="menu-btn btn-c-9" style="grid-column: span 2;" onclick="startMode('mixed')">9. All Mixed Revision</button>
+      </div>
 
-    <div class="visual-area" id="visual-board"></div>
+      <div class="section-label">⚡ Time & Speed Challenges</div>
+      <div class="menu-grid">
+        <button class="menu-btn btn-challenge" onclick="startChallenge('bomb')">💣 10-Min Bomb Rush</button>
+        <button class="menu-btn btn-challenge" onclick="startChallenge('speed30')">🏁 30 Questions Speedrun</button>
+      </div>
 
-    <div class="options-title">Tap the answer:</div>
-    <div class="options-grid" id="options"></div>
+      <div class="bottom-tools">
+        <button class="btn-tool" style="background: #f39c12;" onclick="openShop()">🛒 Dino Shop</button>
+        <button class="btn-tool" style="background: #2980b9;" onclick="openAnalytics()">📊 Parent Report</button>
+      </div>
+    </div>
 
-    <div class="msg-area" id="message"></div>
+    <!-- 4. GAME VIEW -->
+    <div id="game-view">
+      <div class="top-bar">
+        <button class="btn-back" onclick="exitToMenu()">◀ Menu</button>
+        <div class="mode-badge" id="mode-badge">Mode</div>
+        <div class="timer-banner" id="game-timer">⏱️ 00:00</div>
+        <button class="btn-back" id="btn-visual-toggle" onclick="toggleVisual()">👁️ Visual: ON</button>
+      </div>
+
+      <div class="question-box" id="question-text">7 + 3 = ?</div>
+      <div class="instructions" id="hint-text">Instructions</div>
+
+      <div class="visual-area" id="visual-board"></div>
+
+      <div id="options-box" class="options-grid"></div>
+      <div class="msg-area" id="msg-text"></div>
+    </div>
   </div>
 </div>
 
-<!-- DINO SHOP MODAL -->
+<!-- SHOP MODAL -->
 <div id="shop-modal" class="modal-overlay">
   <div class="modal-box">
     <h2>🦖 Dino Hat Shop</h2>
-    <div>Use your coins to dress up Dino!</div>
-    <div class="shop-item-grid" id="shop-grid"></div>
-    <button class="btn-back" onclick="closeShop()" style="width: 100%; padding: 10px;">Close Shop</button>
+    <div>Equip purchased hats directly to your Dino!</div>
+    <div class="shop-grid" id="shop-grid"></div>
+    <button class="btn-back" style="width: 100%; padding: 10px;" onclick="closeModal('shop-modal')">Close Shop</button>
   </div>
 </div>
 
-<!-- VICTORY MODAL FOR 30 QUESTIONS -->
-<div id="victory-modal" class="modal-overlay">
+<!-- ANALYTICS MODAL -->
+<div id="analytics-modal" class="modal-overlay">
   <div class="modal-box">
-    <div style="font-size: 55px; margin-bottom: 5px;">🏆🎉</div>
-    <h2 style="color: #2e7d32; margin: 0 0 8px 0;">STAGE CLEAR!</h2>
-    <div style="font-size: 18px; font-weight: bold; color: #e65100; margin-bottom: 10px;">
-      You completed 30 questions today!
+    <h2>📊 Learning Analytics Report</h2>
+    <div class="stat-card">
+      <div>⏱️️ Total Time Spent: <span class="stat-highlight" id="an-time">0 min</span></div>
+      <div>✅ Total Correct: <span class="stat-highlight" id="an-correct">0</span> questions</div>
+      <div>❌ Total Mistakes: <span class="stat-highlight" id="an-wrong">0</span> times</div>
+      <div>⚡ Average Speed: <span class="stat-highlight" id="an-speed">0s</span> per question</div>
     </div>
-    <div style="color: #555; margin-bottom: 18px;">
-      Super Math Champion! Here is a bonus reward:<br>
-      <span style="font-size: 20px; font-weight: bold; color: #d35400;">🪙 +5 Bonus Coins!</span>
+    <div class="stat-card" style="border-left: 4px solid #4caf50;">
+      <div style="font-weight: bold; color: #2e7d32;">💪 Strongest Topic:</div>
+      <div id="an-strong" style="margin-top: 4px;">Answering more to calculate...</div>
     </div>
-    <button class="btn-shop" style="width: 100%; padding: 12px; font-size: 17px;" onclick="closeVictoryModal()">Keep Playing ➔</button>
+    <div class="stat-card" style="border-left: 4px solid #f44336;">
+      <div style="font-weight: bold; color: #c62828;">🎯 Needs Practice:</div>
+      <div id="an-weak" style="margin-top: 4px;">Answering more to calculate...</div>
+    </div>
+    <button class="btn-back" style="width: 100%; padding: 10px; margin-top: 10px;" onclick="closeModal('analytics-modal')">Close</button>
+  </div>
+</div>
+
+<!-- CHALLENGE FINISH MODAL -->
+<div id="result-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div id="res-icon" style="font-size: 55px;">🏆</div>
+    <h2 id="res-title">Challenge Complete!</h2>
+    <div id="res-desc" style="margin: 15px 0; font-size: 16px; color: #444;"></div>
+    <button class="btn-back" style="width: 100%; padding: 12px; background: #4caf50; color: white;" onclick="closeModal('result-modal'); exitToMenu();">Back to Menu ➔</button>
   </div>
 </div>
 
 <script>
-// --- AUDIO SYSTEM ---
+// --- AUDIO SYNTHESIS ENGINE ---
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let ctx;
-
 function initAudio() {
   if (!ctx) ctx = new AudioCtx();
   if (ctx.state === 'suspended') ctx.resume();
 }
 
-function playDinoChompSound() {
+function playDinoChomp() {
   initAudio();
   const now = ctx.currentTime;
-
   const jawOsc = ctx.createOscillator();
   const jawGain = ctx.createGain();
   jawOsc.type = 'sawtooth';
   jawOsc.frequency.setValueAtTime(160, now);
   jawOsc.frequency.exponentialRampToValueAtTime(30, now + 0.18);
-
   const jawFilter = ctx.createBiquadFilter();
   jawFilter.type = 'lowpass';
   jawFilter.frequency.setValueAtTime(250, now);
-
   jawGain.gain.setValueAtTime(0.9, now);
   jawGain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
-
   jawOsc.connect(jawFilter);
   jawFilter.connect(jawGain);
   jawGain.connect(ctx.destination);
   jawOsc.start(now);
   jawOsc.stop(now + 0.22);
 
-  const bufferSize = ctx.sampleRate * 0.2;
+  const bufferSize = ctx.sampleRate * 0.18;
   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-  }
-
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
   const noise = ctx.createBufferSource();
   noise.buffer = buffer;
   const crunchFilter = ctx.createBiquadFilter();
   crunchFilter.type = 'bandpass';
   crunchFilter.frequency.setValueAtTime(500, now);
   crunchFilter.Q.setValueAtTime(1.5, now);
-
   const crunchGain = ctx.createGain();
   crunchGain.gain.setValueAtTime(0.8, now);
-  crunchGain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-
+  crunchGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
   noise.connect(crunchFilter);
   crunchFilter.connect(crunchGain);
   crunchGain.connect(ctx.destination);
   noise.start(now);
-  noise.stop(now + 0.2);
+  noise.stop(now + 0.18);
 }
 
-function playPopSound() {
+function playPop() {
   initAudio();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -535,533 +703,788 @@ function playPopSound() {
   osc.stop(ctx.currentTime + 0.08);
 }
 
-function playSuccessSound() {
+function playSuccess() {
   initAudio();
   const notes = [261.63, 329.63, 392.00, 523.25];
   notes.forEach((freq, idx) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
-    gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.09);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + idx * 0.09 + 0.18);
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + idx * 0.08 + 0.16);
     osc.connect(gain);
     gain.connect(ctx.destination);
-    osc.start(ctx.currentTime + idx * 0.09);
-    osc.stop(ctx.currentTime + idx * 0.09 + 0.18);
+    osc.start(ctx.currentTime + idx * 0.08);
+    osc.stop(ctx.currentTime + idx * 0.08 + 0.16);
   });
 }
 
-// 30題大過關喇叭勝利音效 (Fanfare Sound)
-function playFanfareSound() {
+function playBombExplosion() {
   initAudio();
-  const fanfare = [
-    { f: 261.63, t: 0.0, d: 0.15 },
-    { f: 329.63, t: 0.15, d: 0.15 },
-    { f: 392.00, t: 0.30, d: 0.15 },
-    { f: 523.25, t: 0.45, d: 0.45 },
-    { f: 392.00, t: 0.70, d: 0.15 },
-    { f: 523.25, t: 0.85, d: 0.65 }
-  ];
-  fanfare.forEach(note => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(note.f, ctx.currentTime + note.t);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime + note.t);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + note.t + note.d);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(ctx.currentTime + note.t);
-    osc.stop(ctx.currentTime + note.t + note.d);
-  });
+  const now = ctx.currentTime;
+  const bufferSize = ctx.sampleRate * 0.8;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.2));
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(150, now);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(1.0, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.8);
 }
 
-// --- CONFETTI ANIMATION (彩帶飄落特效) ---
-let confettiParticles = [];
-let confettiAnimationId = null;
+// --- USER & DATA MANAGEMENT ---
+let currentUser = null;
+let userData = null;
 
-function triggerConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx2d = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const colors = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#ff7979'];
-  confettiParticles = [];
-
-  for (let i = 0; i < 120; i++) {
-    confettiParticles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * -canvas.height, // start above screen
-      w: Math.random() * 12 + 6,
-      h: Math.random() * 8 + 4,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      speedY: Math.random() * 4 + 3,
-      speedX: Math.random() * 3 - 1.5,
-      rot: Math.random() * 360,
-      rotSpeed: Math.random() * 8 - 4
-    });
-  }
-
-  if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
-  renderConfetti(ctx2d, canvas);
-
-  // Stop after 6 seconds
-  setTimeout(() => {
-    cancelAnimationFrame(confettiAnimationId);
-    ctx2d.clearRect(0, 0, canvas.width, canvas.height);
-  }, 6000);
-}
-
-function renderConfetti(ctx2d, canvas) {
-  ctx2d.clearRect(0, 0, canvas.width, canvas.height);
-  confettiParticles.forEach(p => {
-    ctx2d.save();
-    ctx2d.translate(p.x, p.y);
-    ctx2d.rotate((p.rot * Math.PI) / 180);
-    ctx2d.fillStyle = p.color;
-    ctx2d.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-    ctx2d.restore();
-
-    p.y += p.speedY;
-    p.x += p.speedX;
-    p.rot += p.rotSpeed;
-
-    if (p.y > canvas.height) {
-      p.y = -20;
-      p.x = Math.random() * canvas.width;
-    }
-  });
-  confettiAnimationId = requestAnimationFrame(() => renderConfetti(ctx2d, canvas));
-}
-
-// --- SCORE, COIN & GOAL SYSTEM ---
-let coins = parseInt(localStorage.getItem('dino_coins')) || 0;
-let totalScore = parseInt(localStorage.getItem('dino_total_score')) || 0;
-
-function getTodayString() {
+function getTodayStr() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-let savedDate = localStorage.getItem('dino_score_date') || getTodayString();
-let todayScore = parseInt(localStorage.getItem('dino_today_score')) || 0;
-let celebratedToday = (localStorage.getItem('dino_celebrated_date') === getTodayString());
+function handleLogin() {
+  initAudio();
+  playPop();
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  if (!u || !p) { alert("Please enter both Name and Password"); return; }
 
-if (savedDate !== getTodayString()) {
-  todayScore = 0;
-  savedDate = getTodayString();
-  celebratedToday = false;
-  localStorage.setItem('dino_score_date', savedDate);
-  localStorage.setItem('dino_today_score', todayScore);
-  localStorage.removeItem('dino_celebrated_date');
+  currentUser = u;
+  const storeKey = `dino_user_${u}`;
+  const raw = localStorage.getItem(storeKey);
+  
+  if (raw) {
+    userData = JSON.parse(raw);
+    if (userData.pass !== p) { alert("Incorrect password for this student!"); return; }
+  } else {
+    userData = {
+      pass: p,
+      todayDate: getTodayStr(),
+      todayCoins: 0,
+      totalCoins: 0,
+      todayScore: 0,
+      totalScore: 0,
+      totalWrong: 0,
+      totalSeconds: 0,
+      equippedHat: 'none',
+      ownedHats: ['none'],
+      topicStats: {}
+    };
+  }
+
+  if (userData.todayDate !== getTodayStr()) {
+    userData.todayDate = getTodayStr();
+    userData.todayScore = 0;
+    userData.todayCoins = 0;
+  }
+  saveUserData();
+
+  document.getElementById('login-view').style.display = 'none';
+  document.getElementById('app-content').style.display = 'block';
+  document.getElementById('menu-view').style.display = 'block';
+  document.getElementById('display-user').innerText = currentUser;
+  updateDashboardUI();
 }
 
-let ownedHats = JSON.parse(localStorage.getItem('dino_owned_hats')) || ['none'];
-let currentHat = localStorage.getItem('dino_current_hat') || 'none';
+function handleLogout() {
+  playPop();
+  currentUser = null;
+  userData = null;
+  document.getElementById('app-content').style.display = 'none';
+  document.getElementById('login-view').style.display = 'flex';
+}
 
-const SHOP_ITEMS = [
-  { id: 'crown', name: 'Royal Crown', icon: '👑', cost: 5 },
-  { id: 'shades', name: 'Cool Shades', icon: '😎', cost: 10 },
-  { id: 'tophat', name: 'Top Hat', icon: '🎩', cost: 15 },
-  { id: 'rocket', name: 'Jetpack', icon: '🚀', cost: 20 }
-];
+function saveUserData() {
+  if (!currentUser || !userData) return;
+  localStorage.setItem(`dino_user_${currentUser}`, JSON.stringify(userData));
+}
 
-function updateHeaderDisplay() {
-  document.getElementById('today-score').innerText = todayScore;
-  document.getElementById('total-score').innerText = totalScore;
-  document.getElementById('coin-count').innerText = coins;
-
-  localStorage.setItem('dino_today_score', todayScore);
-  localStorage.setItem('dino_total_score', totalScore);
-  localStorage.setItem('dino_coins', coins);
-
-  // Update Daily Progress Bar
-  const percent = Math.min(100, Math.round((todayScore / 30) * 100));
-  document.getElementById('daily-bar').style.width = percent + '%';
-  document.getElementById('daily-text').innerText = (todayScore >= 30) 
-    ? `🎉 Daily Goal Cleared! (${todayScore}/30)` 
-    : `Daily Goal: ${todayScore} / 30`;
-
-  const hatIcon = (currentHat === 'none') ? '' : (SHOP_ITEMS.find(i => i.id === currentHat)?.icon || '');
+function updateDashboardUI() {
+  document.getElementById('today-coins').innerText = userData.todayCoins;
+  document.getElementById('total-coins').innerText = userData.totalCoins;
+  document.getElementById('today-score').innerText = userData.todayScore;
+  document.getElementById('total-score').innerText = userData.totalScore;
+  
+  const hatIcon = SHOP_ITEMS.find(h => h.id === userData.equippedHat)?.icon || '';
   document.getElementById('equipped-hat').innerText = hatIcon;
 }
 
-function recordCorrectAnswer() {
-  todayScore += 1;
-  totalScore += 1;
-  coins += 1;
-  updateHeaderDisplay();
-
-  // Check 30 questions goal
-  if (todayScore >= 30 && !celebratedToday) {
-    celebratedToday = true;
-    localStorage.setItem('dino_celebrated_date', getTodayString());
-    coins += 5; // Bonus coins
-    updateHeaderDisplay();
-    setTimeout(() => {
-      playFanfareSound();
-      triggerConfetti();
-      document.getElementById('victory-modal').style.display = 'flex';
-    }, 600);
-  }
-}
-
-function closeVictoryModal() {
-  playPopSound();
-  document.getElementById('victory-modal').style.display = 'none';
-}
+// --- SHOP ENGINE ---
+const SHOP_ITEMS = [
+  { id: 'crown', name: 'Royal Crown', icon: '👑', cost: 10 },
+  { id: 'shades', name: 'Cool Shades', icon: '😎', cost: 15 },
+  { id: 'tophat', name: 'Magic Top Hat', icon: '🎩', cost: 20 },
+  { id: 'rocket', name: 'Jetpack', icon: '🚀', cost: 25 },
+  { id: 'viking', name: 'Viking Horns', icon: '🪖', cost: 30 },
+  { id: 'wizard', name: 'Wizard Star Hat', icon: '🧙‍♂️', cost: 35 }
+];
 
 function openShop() {
   initAudio();
-  playPopSound();
+  playPop();
   const grid = document.getElementById('shop-grid');
   grid.innerHTML = '';
 
   SHOP_ITEMS.forEach(item => {
+    const isOwned = userData.ownedHats.includes(item.id);
+    const isEquipped = (userData.equippedHat === item.id);
     const card = document.createElement('div');
-    const isOwned = ownedHats.includes(item.id);
-    const isEquipped = (currentHat === item.id);
-
     card.className = `shop-card ${isOwned ? 'owned' : ''}`;
     card.innerHTML = `
       <div style="font-size: 32px;">${item.icon}</div>
-      <div style="font-weight: bold; font-size: 14px;">${item.name}</div>
-      <div style="color: #e67e22; font-weight: bold; font-size: 13px;">🪙 ${item.cost}</div>
+      <div style="font-size: 13px; font-weight: bold;">${item.name}</div>
+      <div style="color: #e67e22; font-size: 12px; font-weight: bold;">🪙 ${item.cost} Coins</div>
     `;
 
     const btn = document.createElement('button');
-    btn.className = 'shop-buy-btn';
-
+    btn.className = 'shop-btn';
     if (isEquipped) {
-      btn.className += ' btn-equip';
       btn.innerText = 'Equipped';
       btn.disabled = true;
     } else if (isOwned) {
-      btn.className += ' btn-equip';
+      btn.className += ' btn-wear';
       btn.innerText = 'Wear';
-      btn.onclick = () => equipHat(item.id);
+      btn.onclick = () => {
+        userData.equippedHat = item.id;
+        saveUserData();
+        updateDashboardUI();
+        openShop();
+      };
     } else {
       btn.className += ' btn-buy';
       btn.innerText = 'Buy';
-      btn.onclick = () => buyHat(item);
+      btn.onclick = () => {
+        if (userData.totalCoins >= item.cost) {
+          userData.totalCoins -= item.cost;
+          userData.ownedHats.push(item.id);
+          userData.equippedHat = item.id;
+          saveUserData();
+          updateDashboardUI();
+          playSuccess();
+          openShop();
+        } else {
+          alert("Not enough coins! Solve more questions to earn coins!");
+        }
+      };
     }
-
     card.appendChild(btn);
     grid.appendChild(card);
   });
-
   document.getElementById('shop-modal').style.display = 'flex';
 }
 
-function closeShop() {
-  playPopSound();
-  document.getElementById('shop-modal').style.display = 'none';
+function closeModal(id) {
+  playPop();
+  document.getElementById(id).style.display = 'none';
 }
 
-function buyHat(item) {
-  if (coins >= item.cost) {
-    coins -= item.cost;
-    ownedHats.push(item.id);
-    currentHat = item.id;
-    localStorage.setItem('dino_owned_hats', JSON.stringify(ownedHats));
-    localStorage.setItem('dino_current_hat', currentHat);
-    playSuccessSound();
-    updateHeaderDisplay();
-    openShop();
-  } else {
-    alert("Keep answering questions to earn more coins!");
+// --- LEARNING ANALYTICS ENGINE ---
+function openAnalytics() {
+  initAudio();
+  playPop();
+  const totalMins = Math.round(userData.totalSeconds / 60);
+  const totalAns = userData.totalScore + userData.totalWrong;
+  const avgSpeed = totalAns > 0 ? (userData.totalSeconds / totalAns).toFixed(1) : 0;
+
+  document.getElementById('an-time').innerText = `${totalMins} min`;
+  document.getElementById('an-correct').innerText = userData.totalScore;
+  document.getElementById('an-wrong').innerText = userData.totalWrong;
+  document.getElementById('an-speed').innerText = `${avgSpeed}s`;
+
+  let bestTopic = "None yet", worstTopic = "None yet";
+  let maxAcc = -1, minAcc = 999;
+
+  for (const [topic, st] of Object.entries(userData.topicStats)) {
+    const totalTopic = st.correct + st.wrong;
+    if (totalTopic >= 3) {
+      const acc = st.correct / totalTopic;
+      if (acc > maxAcc) { maxAcc = acc; bestTopic = `${topic} (${Math.round(acc*100)}% accuracy)`; }
+      if (acc < minAcc) { minAcc = acc; worstTopic = `${topic} (${Math.round(acc*100)}% accuracy)`; }
+    }
   }
+
+  document.getElementById('an-strong').innerText = bestTopic;
+  document.getElementById('an-weak').innerText = worstTopic;
+  document.getElementById('analytics-modal').style.display = 'flex';
 }
 
-function equipHat(id) {
-  currentHat = id;
-  localStorage.setItem('dino_current_hat', currentHat);
-  playPopSound();
-  updateHeaderDisplay();
-  openShop();
-}
-
-// --- TIMER SYSTEM ---
-let timerInterval = null;
-let timerSeconds = 0;
-let timerEnabled = true;
-
-function toggleTimerSetting() {
-  timerEnabled = document.getElementById('timer-toggle').checked;
-  document.getElementById('timer-box').style.display = timerEnabled ? 'block' : 'none';
-}
-
-function startTimer() {
-  clearInterval(timerInterval);
-  timerSeconds = 0;
-  updateTimerUI();
-  if (!timerEnabled) return;
-
-  timerInterval = setInterval(() => {
-    timerSeconds++;
-    updateTimerUI();
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timerInterval);
-}
-
-function updateTimerUI() {
-  const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-  const s = (timerSeconds % 60).toString().padStart(2, '0');
-  document.getElementById('timer-box').innerText = `⏱️ ${m}:${s}`;
-}
-
-// --- STATE MANAGEMENT ---
-let currentMode = 1;
-let currentQuestionType = 1;
-let correctAns = 0;
+// --- GAME LOGIC & CURRICULUM GENERATOR ---
+let activeMode = '';
+let activeChallenge = '';
+let isChallenge = false;
+let challengeTimer = 0;
+let challengeInterval = null;
+let challengeQCount = 0;
+let questionStartTime = 0;
 let isAnswered = false;
+let correctAns = null;
+let showVisual = true;
 
-let make10_a = 0;
-let make10_b = 0;
+// Question state
+let q_paramA = 0;
+let q_paramB = 0;
+let q_paramStep = 1;
+let q_type = '';
 let make10_moved = 0;
 
-function selectMode(mode) {
+// Variables for interactive Halves Fair-Share
+let half_sharedCount = 0;
+let isDoubleQuestion = true;
+
+const ALL_CURRICULUM_MODES = ['add10','sub10','make10','bonds','doubles','moreless','skip','compare'];
+
+function toggleVisual() {
   initAudio();
-  playPopSound();
-  currentMode = mode;
+  playPop();
+  showVisual = !showVisual;
+  const b = document.getElementById('btn-visual-toggle');
+  b.innerText = showVisual ? '👁️ Visual: ON' : '🙈 Visual: OFF';
+  renderQuestionVisual();
+}
+
+function startMode(mode) {
+  initAudio();
+  playPop();
+  activeMode = mode;
+  isChallenge = false;
   document.getElementById('menu-view').style.display = 'none';
   document.getElementById('game-view').style.display = 'block';
+  document.getElementById('game-timer').innerText = 'Practice';
   nextQuestion();
 }
 
-function goToMenu() {
+function startChallenge(chType) {
   initAudio();
-  playPopSound();
-  stopTimer();
+  playPop();
+  activeChallenge = chType;
+  isChallenge = true;
+  challengeQCount = 0;
+  document.getElementById('menu-view').style.display = 'none';
+  document.getElementById('game-view').style.display = 'block';
+
+  clearInterval(challengeInterval);
+
+  if (chType === 'bomb') {
+    challengeTimer = 600;
+    updateTimerBanner(`💣 10:00`);
+    challengeInterval = setInterval(() => {
+      challengeTimer--;
+      const m = Math.floor(challengeTimer / 60).toString().padStart(2, '0');
+      const s = (challengeTimer % 60).toString().padStart(2, '0');
+      updateTimerBanner(`💣 ${m}:${s}`);
+
+      if (challengeTimer <= 10) {
+        document.getElementById('game-view').classList.add('bomb-shake');
+      }
+
+      if (challengeTimer <= 0) {
+        clearInterval(challengeInterval);
+        document.getElementById('game-view').classList.remove('bomb-shake');
+        playBombExplosion();
+        showChallengeResult('💥 BOOM! Time Up!', `Awesome stamina! You completed <b>${challengeQCount}</b> questions in 10 minutes!`);
+      }
+    }, 1000);
+  } else if (chType === 'speed30') {
+    challengeTimer = 0;
+    updateTimerBanner(`⏱️ 00:00 (0/30)`);
+    challengeInterval = setInterval(() => {
+      challengeTimer++;
+      const m = Math.floor(challengeTimer / 60).toString().padStart(2, '0');
+      const s = (challengeTimer % 60).toString().padStart(2, '0');
+      updateTimerBanner(`⏱️ ${m}:${s} (${challengeQCount}/30)`);
+    }, 1000);
+  }
+  nextQuestion();
+}
+
+function updateTimerBanner(txt) {
+  document.getElementById('game-timer').innerText = txt;
+}
+
+function exitToMenu() {
+  playPop();
+  clearInterval(challengeInterval);
+  document.getElementById('game-view').classList.remove('bomb-shake');
   document.getElementById('game-view').style.display = 'none';
   document.getElementById('menu-view').style.display = 'block';
+  updateDashboardUI();
 }
 
+// Year 1 Curriculum Question Builders
 function nextQuestion() {
   isAnswered = false;
-  document.getElementById('message').innerText = '';
-  startTimer();
+  document.getElementById('msg-text').innerText = '';
+  questionStartTime = Date.now();
 
-  if (currentMode === 4) {
-    currentQuestionType = Math.floor(Math.random() * 3) + 1;
-  } else {
-    currentQuestionType = currentMode;
+  let mode = isChallenge ? ALL_CURRICULUM_MODES[Math.floor(Math.random() * ALL_CURRICULUM_MODES.length)] : activeMode;
+  if (mode === 'mixed') mode = ALL_CURRICULUM_MODES[Math.floor(Math.random() * ALL_CURRICULUM_MODES.length)];
+  q_type = mode;
+
+  const qBox = document.getElementById('question-text');
+  const hBox = document.getElementById('hint-text');
+
+  if (mode === 'add10') {
+    document.getElementById('mode-badge').innerText = 'Addition ≤ 10';
+    q_paramA = Math.floor(Math.random() * 5) + 1;
+    q_paramB = Math.floor(Math.random() * (10 - q_paramA)) + 1;
+    correctAns = q_paramA + q_paramB;
+    qBox.innerText = `${q_paramA} + ${q_paramB} = ?`;
+    hBox.innerText = `Count 5 in each row: 🍪 = ${q_paramA}, 🍓 = ${q_paramB}`;
+  } 
+  else if (mode === 'sub10') {
+    document.getElementById('mode-badge').innerText = 'Dino Subtraction';
+    q_paramA = Math.floor(Math.random() * 6) + 4;
+    q_paramB = Math.floor(Math.random() * (q_paramA - 1)) + 1;
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `🦖 Dino chomps ${q_paramB} cookies! Tap them!`;
+  }
+  else if (mode === 'make10') {
+    document.getElementById('mode-badge').innerText = 'Make 10 Addition';
+    q_paramA = Math.floor(Math.random() * 3) + 7;
+    q_paramB = Math.floor(Math.random() * 5) + 3;
+    correctAns = q_paramA + q_paramB;
+    make10_moved = 0;
+    qBox.innerText = `${q_paramA} + ${q_paramB} = ?`;
+    hBox.innerText = `Move stars to make 10 in the Ten-Frame!`;
+  }
+  else if (mode === 'bonds') {
+    document.getElementById('mode-badge').innerText = 'Number Bonds';
+    const target = Math.random() > 0.5 ? 10 : 20;
+    q_paramA = Math.floor(Math.random() * (target - 2)) + 1;
+    correctAns = target - q_paramA;
+    qBox.innerText = `${q_paramA} + [ ? ] = ${target}`;
+    hBox.innerText = `What is the missing friend number to make ${target}?`;
+  }
+  else if (mode === 'doubles') {
+    document.getElementById('mode-badge').innerText = 'Doubles & Halves';
+    isDoubleQuestion = Math.random() > 0.5;
+    if (isDoubleQuestion) {
+      q_paramA = Math.floor(Math.random() * 6) + 1;
+      correctAns = q_paramA * 2;
+      qBox.innerText = `Double ${q_paramA} = ?`;
+      hBox.innerText = `🪞 Look in the mirror! Left has ${q_paramA}, Right has ${q_paramA}!`;
+    } else {
+      correctAns = Math.floor(Math.random() * 6) + 1;
+      q_paramA = correctAns * 2;
+      half_sharedCount = 0;
+      qBox.innerText = `Half of ${q_paramA} = ?`;
+      hBox.innerText = `👉 Tap strawberries to fair-share equally between the 2 dinos!`;
+    }
+  }
+  else if (mode === 'moreless') {
+    document.getElementById('mode-badge').innerText = 'More / Less';
+    const isMore = Math.random() > 0.5;
+    const stepChoices = [1, 1, 2, 10]; // weighted towards 1, with 2 & 10
+    q_paramStep = stepChoices[Math.floor(Math.random() * stepChoices.length)];
+
+    if (q_paramStep === 10) {
+      q_paramA = Math.floor(Math.random() * 9) + 1; // 1 to 9
+      correctAns = isMore ? q_paramA + 10 : q_paramA; // keep non-negative
+      if (!isMore) {
+        q_paramA += 10;
+        correctAns = q_paramA - 10;
+      }
+    } else if (q_paramStep === 2) {
+      q_paramA = Math.floor(Math.random() * 16) + 2; // 2 to 17
+      correctAns = isMore ? q_paramA + 2 : q_paramA - 2;
+    } else {
+      q_paramA = Math.floor(Math.random() * 18) + 2;
+      correctAns = isMore ? q_paramA + 1 : q_paramA - 1;
+    }
+
+    qBox.innerText = isMore ? `${q_paramStep} More than ${q_paramA} = ?` : `${q_paramStep} Less than ${q_paramA} = ?`;
+    hBox.innerText = isMore ? `Jump forward +${q_paramStep}!` : `Jump backward -${q_paramStep}!`;
+  }
+  else if (mode === 'skip') {
+    document.getElementById('mode-badge').innerText = 'Skip Counting';
+    const step = [2, 5, 10][Math.floor(Math.random() * 3)];
+    const start = step * (Math.floor(Math.random() * 3) + 1);
+    
+    // Blank position is randomized (0, 1, 2, or 3)
+    const blankIdx = Math.floor(Math.random() * 4);
+    const seq = [start, start + step, start + step * 2, start + step * 3];
+    correctAns = seq[blankIdx];
+
+    const displaySeq = seq.map((num, idx) => idx === blankIdx ? '[ ? ]' : num);
+    qBox.innerText = displaySeq.join(', ');
+    hBox.innerText = `Counting in ${step}s! What is the missing number?`;
+  }
+  else if (mode === 'compare') {
+    document.getElementById('mode-badge').innerText = 'Comparing (>, <, =)';
+    q_paramA = Math.floor(Math.random() * 18) + 1;
+    const same = Math.random() < 0.25;
+    q_paramB = same ? q_paramA : Math.floor(Math.random() * 18) + 1;
+
+    if (q_paramA > q_paramB) correctAns = '>';
+    else if (q_paramA < q_paramB) correctAns = '<';
+    else correctAns = '=';
+
+    qBox.innerText = `${q_paramA}  [ ? ]  ${q_paramB}`;
+    hBox.innerText = `🦖 Dino always chomps the bigger number! Choose >, <, or =`;
   }
 
-  if (currentQuestionType === 1) renderAddWithin10();
-  else if (currentQuestionType === 2) renderMake10();
-  else if (currentQuestionType === 3) renderSubWithin10();
-
-  renderButtons();
+  renderQuestionVisual();
+  renderKeypad();
 }
 
-// 1. ADDITION WITHIN 10 (5 IN A ROW)
-function renderAddWithin10() {
-  document.getElementById('mode-badge').innerText = 'Addition ≤ 10';
-  const a = Math.floor(Math.random() * 5) + 1;
-  const b = Math.floor(Math.random() * (10 - a)) + 1;
-  correctAns = a + b;
-
-  document.getElementById('question').innerText = `${a} + ${b} = ?`;
-  document.getElementById('hint-text').innerText = `Count 5 in each row: 🍪 = ${a}, 🍓 = ${b}`;
-
+function renderQuestionVisual() {
   const board = document.getElementById('visual-board');
   board.innerHTML = '';
 
-  const grid = document.createElement('div');
-  grid.className = 'grid-5-group';
-
-  for (let i = 0; i < a; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-item-cell';
-    cell.innerText = '🍪';
-    cell.onclick = () => playPopSound();
-    grid.appendChild(cell);
+  if (!showVisual) {
+    board.innerHTML = `
+      <div class="mental-box">
+        <div style="font-size: 32px;">🧠💭</div>
+        <div>Mental Math Mode Active!</div>
+        <div style="font-size: 11px; color: #999;">Picture the numbers in your mind!</div>
+      </div>
+    `;
+    return;
   }
 
-  for (let i = 0; i < b; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-item-cell';
-    cell.innerText = '🍓';
-    cell.onclick = () => playPopSound();
-    grid.appendChild(cell);
+  if (q_type === 'add10') {
+    const grid = document.createElement('div');
+    grid.className = 'grid-5-group';
+    for (let i = 0; i < q_paramA; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      grid.appendChild(c);
+    }
+    for (let i = 0; i < q_paramB; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍓';
+      grid.appendChild(c);
+    }
+    board.appendChild(grid);
   }
-
-  board.appendChild(grid);
-}
-
-// 2. MAKE 10 ADDITION
-function renderMake10() {
-  document.getElementById('mode-badge').innerText = 'Make 10 Addition';
-  make10_a = Math.floor(Math.random() * 3) + 7;
-  make10_b = Math.floor(Math.random() * 5) + 3;
-  correctAns = make10_a + make10_b;
-  make10_moved = 0;
-
-  document.getElementById('question').innerText = `${make10_a} + ${make10_b} = ?`;
-  updateMake10UI();
-}
-
-function updateMake10UI() {
-  const needed = 10 - make10_a;
-  const remainingInTray = make10_b - make10_moved;
-
-  const hint = document.getElementById('hint-text');
-  if (make10_moved < needed) {
-    hint.innerText = `👉 Tap ⭐ in the tray to move ${needed - make10_moved} more into the frame!`;
-  } else {
-    hint.innerText = `🎉 10 is full! Frame = 10, Outside = ${remainingInTray}. How many in total?`;
-  }
-
-  const board = document.getElementById('visual-board');
-  board.innerHTML = '';
-
-  const container = document.createElement('div');
-  container.className = 'ten-frame-container';
-
-  const frame = document.createElement('div');
-  frame.className = 'ten-frame';
-
-  for (let i = 0; i < 10; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'frame-cell';
-
-    if (i < make10_a) {
-      cell.classList.add('filled');
-      cell.innerText = '🍪';
-    } else if (i < make10_a + make10_moved) {
-      cell.classList.add('filled');
-      cell.innerText = '⭐';
-      cell.style.cursor = 'pointer';
-      cell.title = 'Tap to remove';
-      cell.onclick = () => {
+  else if (q_type === 'sub10') {
+    const grid = document.createElement('div');
+    grid.className = 'grid-5-group';
+    for (let i = 0; i < q_paramA; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      c.onclick = function() {
         if (!isAnswered) {
-          playPopSound();
-          make10_moved--;
-          updateMake10UI();
+          this.classList.toggle('eaten');
+          playDinoChomp();
         }
       };
-    } else {
-      cell.innerText = '';
+      grid.appendChild(c);
     }
-    frame.appendChild(cell);
+    board.appendChild(grid);
   }
+  else if (q_type === 'make10') {
+    const container = document.createElement('div');
+    container.className = 'ten-frame-container';
+    const frame = document.createElement('div');
+    frame.className = 'ten-frame';
 
-  const info = document.createElement('div');
-  info.style.fontSize = '14px';
-  info.style.color = '#e65100';
-  info.style.fontWeight = 'bold';
-  info.innerText = `Ten-Frame: ${make10_a + make10_moved}/10 | Waiting Tray: ${remainingInTray}`;
-
-  const tray = document.createElement('div');
-  tray.className = 'outside-tray-grid';
-
-  for (let i = 0; i < remainingInTray; i++) {
-    const star = document.createElement('div');
-    star.className = 'clickable-star';
-    star.innerText = '⭐';
-    star.onclick = () => {
-      if (!isAnswered && (make10_a + make10_moved < 10)) {
-        playPopSound();
-        make10_moved++;
-        updateMake10UI();
+    for (let i = 0; i < 10; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'frame-cell';
+      if (i < q_paramA) {
+        cell.classList.add('filled');
+        cell.innerText = '🍪';
+      } else if (i < q_paramA + make10_moved) {
+        cell.classList.add('filled');
+        cell.innerText = '⭐';
+        cell.onclick = () => {
+          if (!isAnswered) { playPop(); make10_moved--; renderQuestionVisual(); }
+        };
       }
-    };
-    tray.appendChild(star);
-  }
+      frame.appendChild(cell);
+    }
 
-  container.appendChild(frame);
-  container.appendChild(info);
-  container.appendChild(tray);
-  board.appendChild(container);
+    const remainingInTray = q_paramB - make10_moved;
+    const tray = document.createElement('div');
+    tray.className = 'outside-tray-grid';
+    for (let i = 0; i < remainingInTray; i++) {
+      const st = document.createElement('div');
+      st.className = 'clickable-star';
+      st.innerText = '⭐';
+      st.onclick = () => {
+        if (!isAnswered && (q_paramA + make10_moved < 10)) {
+          playPop();
+          make10_moved++;
+          renderQuestionVisual();
+        }
+      };
+      tray.appendChild(st);
+    }
+    container.appendChild(frame);
+    container.appendChild(tray);
+    board.appendChild(container);
+  }
+  else if (q_type === 'doubles') {
+    if (isDoubleQuestion) {
+      const mWrap = document.createElement('div');
+      mWrap.className = 'mirror-container';
+
+      const pLeft = document.createElement('div');
+      pLeft.className = 'mirror-panel';
+      pLeft.innerHTML = `<div style="font-size: 12px; font-weight: bold; color: #00796b;">Left: ${q_paramA}</div>`;
+      const gL = document.createElement('div');
+      gL.className = 'grid-5-group';
+      for (let i = 0; i < q_paramA; i++) {
+        const c = document.createElement('div');
+        c.className = 'grid-item-cell';
+        c.innerText = '🍪';
+        gL.appendChild(c);
+      }
+      pLeft.appendChild(gL);
+
+      const pMid = document.createElement('div');
+      pMid.className = 'mirror-divider';
+      pMid.innerHTML = `<span>🪞</span><span style="font-size: 11px;">Mirror</span>`;
+
+      const pRight = document.createElement('div');
+      pRight.className = 'mirror-panel';
+      pRight.innerHTML = `<div style="font-size: 12px; font-weight: bold; color: #00796b;">Twin: ${q_paramA}</div>`;
+      const gR = document.createElement('div');
+      gR.className = 'grid-5-group';
+      for (let i = 0; i < q_paramA; i++) {
+        const c = document.createElement('div');
+        c.className = 'grid-item-cell';
+        c.innerText = '🍪';
+        gR.appendChild(c);
+      }
+      pRight.appendChild(gR);
+
+      mWrap.appendChild(pLeft);
+      mWrap.appendChild(pMid);
+      mWrap.appendChild(pRight);
+      board.appendChild(mWrap);
+    } else {
+      const hWrap = document.createElement('div');
+      hWrap.className = 'halves-container';
+
+      const unshared = q_paramA - half_sharedCount;
+      const leftShare = Math.ceil(half_sharedCount / 2);
+      const rightShare = Math.floor(half_sharedCount / 2);
+
+      const poolTitle = document.createElement('div');
+      poolTitle.style.fontSize = '12px';
+      poolTitle.style.fontWeight = 'bold';
+      poolTitle.style.color = '#c2185b';
+      poolTitle.innerText = `🍓 Total to Share: ${unshared} left`;
+
+      const pool = document.createElement('div');
+      pool.className = 'halves-pool';
+      for (let i = 0; i < unshared; i++) {
+        const item = document.createElement('div');
+        item.style.fontSize = '26px';
+        item.style.cursor = 'pointer';
+        item.innerText = '🍓';
+        item.title = 'Tap to share between dinos!';
+        item.onclick = () => {
+          if (!isAnswered && half_sharedCount < q_paramA) {
+            playPop();
+            half_sharedCount++;
+            renderQuestionVisual();
+            if (half_sharedCount === q_paramA) {
+              document.getElementById('hint-text').innerText = `🎉 Fair Share! Each dino gets ${correctAns}! So Half of ${q_paramA} is ${correctAns}!`;
+            }
+          }
+        };
+        pool.appendChild(item);
+      }
+
+      const traysWrap = document.createElement('div');
+      traysWrap.className = 'halves-trays-wrap';
+
+      const tray1 = document.createElement('div');
+      tray1.className = 'halves-tray';
+      tray1.innerHTML = `<div style="font-weight: bold; font-size: 13px;">🦖 Dino Rex (${leftShare})</div>`;
+      const t1Items = document.createElement('div');
+      t1Items.className = 'halves-tray-items';
+      for (let i = 0; i < leftShare; i++) t1Items.innerHTML += '<span style="font-size: 22px;">🍓</span>';
+      tray1.appendChild(t1Items);
+
+      const tray2 = document.createElement('div');
+      tray2.className = 'halves-tray';
+      tray2.innerHTML = `<div style="font-weight: bold; font-size: 13px;">🦕 Dino Tri (${rightShare})</div>`;
+      const t2Items = document.createElement('div');
+      t2Items.className = 'halves-tray-items';
+      for (let i = 0; i < rightShare; i++) t2Items.innerHTML += '<span style="font-size: 22px;">🍓</span>';
+      tray2.appendChild(t2Items);
+
+      traysWrap.appendChild(tray1);
+      traysWrap.appendChild(tray2);
+
+      hWrap.appendChild(poolTitle);
+      hWrap.appendChild(pool);
+      hWrap.appendChild(traysWrap);
+      board.appendChild(hWrap);
+    }
+  }
+  else if (q_type === 'compare') {
+    const cWrap = document.createElement('div');
+    cWrap.className = 'compare-container';
+
+    const pLeft = document.createElement('div');
+    pLeft.className = 'compare-panel';
+    pLeft.innerHTML = `<div class="compare-panel-title">Left (${q_paramA})</div>`;
+    const gL = document.createElement('div');
+    gL.className = 'grid-5-group';
+    for (let i = 0; i < Math.min(10, q_paramA); i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      gL.appendChild(c);
+    }
+    pLeft.appendChild(gL);
+
+    const pRight = document.createElement('div');
+    pRight.className = 'compare-panel';
+    pRight.innerHTML = `<div class="compare-panel-title">Right (${q_paramB})</div>`;
+    const gR = document.createElement('div');
+    gR.className = 'grid-5-group';
+    for (let i = 0; i < Math.min(10, q_paramB); i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍓';
+      gR.appendChild(c);
+    }
+    pRight.appendChild(gR);
+
+    cWrap.appendChild(pLeft);
+    cWrap.appendChild(pRight);
+    board.appendChild(cWrap);
+  }
+  else {
+    board.innerHTML = `<div style="font-size: 36px; padding: 10px;">🦖 ✨ 🔢</div>`;
+  }
 }
 
-// 3. SUBTRACTION WITHIN 10
-function renderSubWithin10() {
-  document.getElementById('mode-badge').innerText = 'Dino Subtraction';
-  const total = Math.floor(Math.random() * 7) + 4; 
-  const minus = Math.floor(Math.random() * (total - 1)) + 1;
-  correctAns = total - minus;
-
-  document.getElementById('question').innerText = `${total} - ${minus} = ?`;
-  document.getElementById('hint-text').innerText = `🦖 Dino wants to eat ${minus} cookies! Tap them!`;
-
-  const board = document.getElementById('visual-board');
-  board.innerHTML = '';
+function renderKeypad() {
+  const box = document.getElementById('options-box');
+  box.innerHTML = '';
   
-  const grid = document.createElement('div');
-  grid.className = 'grid-5-group';
-
-  for (let i = 0; i < total; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-item-cell';
-    cell.innerText = '🍪';
-    cell.onclick = function() {
-      if (!isAnswered) {
-        this.classList.toggle('eaten');
-        playDinoChompSound();
-      }
-    };
-    grid.appendChild(cell);
+  if (q_type === 'compare') {
+    box.className = 'options-grid compare-mode';
+    const symbols = ['>', '=', '<'];
+    symbols.forEach(sym => {
+      const b = document.createElement('button');
+      b.className = 'btn-opt btn-compare';
+      b.innerText = sym;
+      b.onclick = () => checkAnswer(sym);
+      box.appendChild(b);
+    });
+    return;
   }
-  board.appendChild(grid);
+
+  box.className = 'options-grid';
+  let btnValues = [];
+
+  if (q_type === 'add10' || q_type === 'sub10') {
+    btnValues = [0,1,2,3,4,5,6,7,8,9,10];
+  } else if (q_type === 'bonds' || q_type === 'doubles' || q_type === 'make10') {
+    for (let i = 0; i <= 20; i++) btnValues.push(i);
+  } else if (q_type === 'moreless') {
+    // Generate close randomized distractors around the answer
+    const distractors = new Set();
+    distractors.add(correctAns);
+    while (distractors.size < 5) {
+      const candidate = correctAns + (Math.floor(Math.random() * 7) - 3);
+      if (candidate >= 0) distractors.add(candidate);
+    }
+    btnValues = Array.from(distractors);
+    // Shuffle
+    for (let i = btnValues.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [btnValues[i], btnValues[j]] = [btnValues[j], btnValues[i]];
+    }
+  } else if (q_type === 'skip') {
+    // Randomized distractors & Fisher-Yates Shuffle (Fixing 3rd position bug)
+    const distractors = new Set();
+    const stepOptions = [2, 5, 10];
+    
+    while (distractors.size < 4) {
+      const offset = (Math.random() > 0.5 ? 1 : -1) * (stepOptions[Math.floor(Math.random() * stepOptions.length)]);
+      const candidate = correctAns + offset;
+      if (candidate > 0 && candidate !== correctAns) {
+        distractors.add(candidate);
+      }
+    }
+    
+    btnValues = [correctAns, ...distractors];
+    for (let i = btnValues.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [btnValues[i], btnValues[j]] = [btnValues[j], btnValues[i]];
+    }
+  }
+
+  btnValues.forEach(val => {
+    const b = document.createElement('button');
+    b.className = 'btn-opt';
+    b.innerText = val;
+    b.onclick = () => checkAnswer(val);
+    box.appendChild(b);
+  });
 }
 
-// KEYPAD BUTTONS
-function renderButtons() {
-  const optBox = document.getElementById('options');
-  optBox.innerHTML = '';
+function checkAnswer(chosen) {
+  if (isAnswered) return;
+  const timeTaken = (Date.now() - questionStartTime) / 1000;
+  userData.totalSeconds += Math.round(timeTaken);
 
-  const maxButton = (currentQuestionType === 2) ? 19 : 10;
-  optBox.style.gridTemplateColumns = 'repeat(5, 1fr)';
+  if (!userData.topicStats[q_type]) userData.topicStats[q_type] = { correct: 0, wrong: 0, time: 0 };
+  userData.topicStats[q_type].time += timeTaken;
 
-  const startIdx = (currentQuestionType === 2) ? 10 : 0;
-  for (let i = startIdx; i <= maxButton; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-opt';
-    btn.innerText = i;
-    btn.onclick = () => {
-      if (!isAnswered) {
-        playPopSound();
-        checkAnswer(i);
-      }
-    };
-    optBox.appendChild(btn);
-  }
-}
-
-function checkAnswer(val) {
-  const msg = document.getElementById('message');
-  if (val === correctAns) {
+  if (chosen === correctAns) {
     isAnswered = true;
-    stopTimer();
-    recordCorrectAnswer();
-    playSuccessSound();
-    msg.className = 'msg-area success';
-    msg.innerText = '🦖 ROAR! +1 Point! Great job!';
+    playSuccess();
+    userData.todayScore++;
+    userData.totalScore++;
+    userData.todayCoins++;
+    userData.totalCoins++;
+    userData.topicStats[q_type].correct++;
+    saveUserData();
+    updateDashboardUI();
 
-    const btns = document.querySelectorAll('.btn-opt');
-    btns.forEach(b => b.disabled = true);
+    document.getElementById('msg-text').className = 'msg-area success';
+    document.getElementById('msg-text').innerText = '🎉 Correct! +1 Coin!';
 
-    setTimeout(() => {
-      nextQuestion();
-    }, 1200);
+    if (isChallenge) {
+      challengeQCount++;
+      if (activeChallenge === 'speed30' && challengeQCount >= 30) {
+        clearInterval(challengeInterval);
+        const m = Math.floor(challengeTimer / 60);
+        const s = challengeTimer % 60;
+        showChallengeResult('🏁 SPEEDRUN CHAMPION!', `You crushed 30 questions in <b>${m}m ${s}s</b>! Speed: ${(challengeTimer/30).toFixed(1)}s/question!`);
+        return;
+      }
+    }
 
+    setTimeout(() => { nextQuestion(); }, 1200);
   } else {
-    msg.className = 'msg-area retry';
-    msg.innerText = 'Try again! Count the items carefully!';
+    userData.totalWrong++;
+    userData.topicStats[q_type].wrong++;
+    saveUserData();
+    document.getElementById('msg-text').className = 'msg-area retry';
+    document.getElementById('msg-text').innerText = 'Almost! Try again!';
   }
 }
 
-// Initialize on Load
-window.onload = () => {
-  updateHeaderDisplay();
-};
+function showChallengeResult(title, desc) {
+  playSuccess();
+  document.getElementById('res-title').innerHTML = title;
+  document.getElementById('res-desc').innerHTML = desc;
+  document.getElementById('result-modal').style.display = 'flex';
+}
 </script>
 
 </body>
