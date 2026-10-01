@@ -498,26 +498,27 @@
     font-weight: bold;
   }
 
-  /* Keyboard Input Preview Box */
+  /* Clean Blank Input Preview Box */
   .keyboard-input-preview {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #f1f8e9;
-    border: 2px solid #81c784;
+    background: #ffffff;
+    border: 2px dashed #a5d6a7;
     border-radius: 12px;
     padding: 4px 14px;
-    font-size: 18px;
+    font-size: 26px;
     font-weight: bold;
-    color: #2e7d32;
+    color: #1b5e20;
     margin-bottom: 6px;
-    min-height: 28px;
-    min-width: 140px;
+    min-height: 40px;
+    min-width: 90px;
+    transition: all 0.2s;
   }
   .keyboard-input-preview.active {
-    border-color: #2e7d32;
+    border: 2px solid #2e7d32;
     background: #e8f5e9;
-    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.25);
   }
 
   /* Buttons */
@@ -714,9 +715,9 @@
 
       <div class="visual-area" id="visual-board"></div>
 
-      <!-- Live Input Preview Box -->
+      <!-- Clean Blank Input Preview Box -->
       <div id="keyboard-preview-wrap">
-        <div class="keyboard-input-preview" id="keyboard-preview">Type or tap answer</div>
+        <div class="keyboard-input-preview" id="keyboard-preview">&nbsp;</div>
       </div>
 
       <div id="options-box" class="options-grid"></div>
@@ -1142,14 +1143,11 @@ function updateTimerBanner(txt) {
   if (activeChallenge === 'bomb' && isChallenge) {
     let widget = document.getElementById('bomb-widget');
 
-    // 建立一次炸彈結構，避免每秒重繪 DOM 打斷過渡動畫
     if (!widget) {
       container.innerHTML = `
         <div id="bomb-widget" class="bomb-timer-widget">
           <svg class="bomb-fuse-svg" viewBox="0 0 44 32">
-            <!-- 灰色底繩 (標示原始路徑) -->
             <path d="M 4 2 Q 22 2, 22 26" class="bomb-fuse-track" />
-            <!-- 燃燒縮短的深色藥引 -->
             <path id="bomb-fuse-path" d="M 4 2 Q 22 2, 22 26" class="bomb-fuse-burn" stroke-dasharray="52" stroke-dashoffset="0" />
           </svg>
           <div id="bomb-spark" class="bomb-sparkle">✨🔥</div>
@@ -1162,11 +1160,9 @@ function updateTimerBanner(txt) {
       widget = document.getElementById('bomb-widget');
     }
 
-    // 1. 即時刷新數碼時間字串
     const digits = document.getElementById('bomb-digits');
     if (digits) digits.innerText = txt;
 
-    // 2. 計算藥引縮短比例與火花沿曲線移動
     const totalSec = 600;
     const fusePath = document.getElementById('bomb-fuse-path');
     const spark = document.getElementById('bomb-spark');
@@ -1184,7 +1180,6 @@ function updateTimerBanner(txt) {
       }
     }
 
-    // 3. 最後 20 秒狂震及閃爍
     if (challengeTimer <= 20) {
       widget.classList.add('bomb-critical');
     } else {
@@ -1198,7 +1193,7 @@ function updateTimerBanner(txt) {
 function exitToMenu() {
   playPop();
   clearInterval(challengeInterval);
-  document.getElementById('game-timer-container').innerHTML = ''; // 清理炸彈 DOM
+  document.getElementById('game-timer-container').innerHTML = '';
   document.getElementById('game-view').classList.remove('bomb-shake');
   document.getElementById('game-view').style.display = 'none';
   document.getElementById('menu-view').style.display = 'block';
@@ -1556,13 +1551,14 @@ function renderQuestionVisual() {
   }
 }
 
+// UPDATE CLEAN BLANK INPUT BOX
 function updateKeyboardPreview() {
   const el = document.getElementById('keyboard-preview');
   if (keyboardBuffer.length > 0) {
-    el.innerText = `Typing: ${keyboardBuffer}  ➔  [Press Enter ↵]`;
+    el.innerText = keyboardBuffer;
     el.classList.add('active');
   } else {
-    el.innerText = `Type / tap number ➔ OK ↵`;
+    el.innerHTML = '&nbsp;';
     el.classList.remove('active');
   }
 }
@@ -1694,20 +1690,20 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
-  // 2. Numeric inputs (0-9) - 停在格仔等待小朋友按 Enter
+  // 2. Numeric inputs (0-9) - Stay in input box until Enter is pressed
   if (e.key >= '0' && e.key <= '9') {
     if (keyboardBuffer.length < 3) {
       keyboardBuffer += e.key;
       updateKeyboardPreview();
     }
   } 
-  // 3. 按 Enter 鍵才正式核對答案
+  // 3. Press Enter to submit answer
   else if (e.key === 'Enter') {
     if (keyboardBuffer.length > 0) {
       submitKeyboardAnswer();
     }
   } 
-  // 4. 按 Backspace 刪除
+  // 4. Press Backspace to remove last digit
   else if (e.key === 'Backspace') {
     keyboardBuffer = keyboardBuffer.slice(0, -1);
     updateKeyboardPreview();
