@@ -15,7 +15,7 @@
     overflow-x: hidden;
   }
   .container {
-    max-width: 540px;
+    max-width: 560px;
     margin: auto;
     background: white;
     padding: 18px;
@@ -142,8 +142,8 @@
     gap: 8px;
   }
   .menu-btn {
-    padding: 12px 8px;
-    font-size: 15px;
+    padding: 10px 6px;
+    font-size: 13.5px;
     font-weight: bold;
     border: none;
     border-radius: 14px;
@@ -152,11 +152,14 @@
     box-shadow: 0 3px 0 rgba(0,0,0,0.12);
     text-align: center;
     transition: all 0.1s;
+    line-height: 1.25;
   }
   .menu-btn:active { transform: translateY(2px); box-shadow: none; }
   
   .btn-c-1 { background: #4caf50; }
   .btn-c-2 { background: #ff9800; }
+  .btn-c-2b { background: #f57c00; }
+  .btn-c-2c { background: #e65100; }
   .btn-c-3 { background: #e91e63; }
   .btn-c-4 { background: #3f51b5; }
   .btn-c-5 { background: #009688; }
@@ -201,11 +204,11 @@
     cursor: pointer;
   }
   .mode-badge {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: bold;
     color: #444;
     background: #f1f2f6;
-    padding: 4px 10px;
+    padding: 4px 8px;
     border-radius: 10px;
   }
   .timer-banner {
@@ -325,7 +328,7 @@
     border-radius: 14px;
     display: inline-block;
   }
-  .instructions { color: #43a047; font-size: 14px; margin-bottom: 8px; font-weight: bold; min-height: 20px; }
+  .instructions { color: #43a047; font-size: 13.5px; margin-bottom: 8px; font-weight: bold; min-height: 20px; }
 
   /* Visual Container */
   .visual-area {
@@ -362,12 +365,37 @@
     align-items: center;
     font-size: 26px;
     cursor: pointer;
+    transition: all 0.15s;
   }
   .grid-item-cell.eaten {
     opacity: 0.15;
     transform: scale(0.6);
     filter: grayscale(100%);
     background: #eee;
+  }
+
+  /* Crossing 10 Decomposed Groups */
+  .sub-crossing-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .sub-group-box {
+    background: white;
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: 2px solid #ffcc80;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sub-group-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #e65100;
+    margin-bottom: 4px;
   }
 
   /* Double Mirror Visual */
@@ -506,7 +534,7 @@
     cursor: pointer;
   }
 
-  /* --- NEW FROG JUMP NUMBER LINE VISUAL --- */
+  /* Frog Jump Number Line */
   .frog-numberline-box {
     width: 100%;
     display: flex;
@@ -520,58 +548,15 @@
     height: 120px;
     overflow: visible;
   }
-  .nl-axis-line {
-    stroke: #2e7d32;
-    stroke-width: 4;
-    stroke-linecap: round;
-  }
-  .nl-tick-line {
-    stroke: #2e7d32;
-    stroke-width: 3;
-    stroke-linecap: round;
-  }
-  .nl-arc-jump {
-    fill: none;
-    stroke: #ff9800;
-    stroke-width: 3.5;
-    stroke-dasharray: 6 3;
-    stroke-linecap: round;
-  }
-  .nl-jump-label {
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 900;
-    fill: #e65100;
-    text-anchor: middle;
-  }
-  .nl-number-text {
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 900;
-    fill: #1b5e20;
-    text-anchor: middle;
-  }
-  .nl-question-circle {
-    fill: #fff9c4;
-    stroke: #fbc02d;
-    stroke-width: 2.5;
-  }
-  .nl-question-text {
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 900;
-    fill: #d32f2f;
-    text-anchor: middle;
-  }
-  .frog-avatar-icon {
-    font-size: 32px;
-    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
-    animation: frogBounce 1s infinite alternate ease-in-out;
-  }
-  @keyframes frogBounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-7px); }
-  }
+  .nl-axis-line { stroke: #2e7d32; stroke-width: 4; stroke-linecap: round; }
+  .nl-tick-line { stroke: #2e7d32; stroke-width: 3; stroke-linecap: round; }
+  .nl-arc-jump { fill: none; stroke: #ff9800; stroke-width: 3.5; stroke-dasharray: 6 3; stroke-linecap: round; }
+  .nl-jump-label { font-family: inherit; font-size: 13px; font-weight: 900; fill: #e65100; text-anchor: middle; }
+  .nl-number-text { font-family: inherit; font-size: 17px; font-weight: 900; fill: #1b5e20; text-anchor: middle; }
+  .nl-question-circle { fill: #fff9c4; stroke: #fbc02d; stroke-width: 2.5; }
+  .nl-question-text { font-family: inherit; font-size: 17px; font-weight: 900; fill: #d32f2f; text-anchor: middle; }
+  .frog-avatar-icon { font-size: 32px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); animation: frogBounce 1s infinite alternate ease-in-out; }
+  @keyframes frogBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-7px); } }
 
   /* Mental Box */
   .mental-box {
@@ -615,9 +600,7 @@
     margin: 6px auto 0 auto;
     gap: 6px;
   }
-  .options-grid.compare-mode {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .options-grid.compare-mode { grid-template-columns: repeat(3, 1fr); }
   .btn-opt {
     font-size: 20px;
     font-weight: bold;
@@ -629,12 +612,7 @@
     cursor: pointer;
     box-shadow: 0 3px 0 #4caf50;
   }
-  .btn-opt.btn-compare {
-    font-size: 32px;
-    padding: 12px 0;
-    background: #0288d1;
-    box-shadow: 0 4px 0 #0277bd;
-  }
+  .btn-opt.btn-compare { font-size: 32px; padding: 12px 0; background: #0288d1; box-shadow: 0 4px 0 #0277bd; }
   .btn-opt:active { transform: translateY(2px); box-shadow: none; }
   .btn-opt:disabled { opacity: 0.5; cursor: not-allowed; }
   .msg-area { min-height: 30px; font-size: 17px; font-weight: bold; margin-top: 4px; }
@@ -664,50 +642,18 @@
   }
 
   /* Shop Grid */
-  .shop-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 12px 0;
-  }
-  .shop-card {
-    border: 2px solid #eee;
-    border-radius: 12px;
-    padding: 8px;
-    background: #fafafa;
-  }
+  .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+  .shop-card { border: 2px solid #eee; border-radius: 12px; padding: 8px; background: #fafafa; }
   .shop-card.owned { border-color: #27ae60; background: #e8f8f5; }
-  .shop-btn {
-    width: 100%;
-    padding: 6px 0;
-    margin-top: 5px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+  .shop-btn { width: 100%; padding: 6px 0; margin-top: 5px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
   .btn-buy { background: #f39c12; color: white; }
   .btn-wear { background: #27ae60; color: white; }
 
   /* Analytics Table */
-  .stat-card {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 10px;
-    margin: 8px 0;
-    text-align: left;
-    font-size: 14px;
-  }
-  .stat-highlight {
-    font-size: 18px;
-    font-weight: bold;
-    color: #2e7d32;
-  }
+  .stat-card { background: #f8f9fa; border-radius: 12px; padding: 10px; margin: 8px 0; text-align: left; font-size: 14px; }
+  .stat-highlight { font-size: 18px; font-weight: bold; color: #2e7d32; }
 
-  /* Bomb Animation */
-  .bomb-shake {
-    animation: shake 0.5s infinite;
-  }
+  .bomb-shake { animation: shake 0.5s infinite; }
   @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
     20% { transform: translate(-2px, -1px) rotate(-2deg); }
@@ -717,12 +663,7 @@
     100% { transform: translate(1px, -1px) rotate(-1deg); }
   }
 
-  #confetti-canvas {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-  }
+  #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
 </style>
 </head>
 <body>
@@ -758,25 +699,26 @@
         <div class="badge-pill">🏆 Total Qs: <span id="total-score">0</span></div>
         <button onclick="handleLogout()" style="background: none; border: none; font-size: 11px; color: #888; cursor: pointer;">Logout</button>
       </div>
-      <!-- Daily 30 Target Bar -->
       <div class="daily-progress-container" title="Daily 30 Goal Progress">
         <div class="daily-progress-fill" id="daily-bar"></div>
       </div>
     </div>
 
-    <!-- 3. MENU VIEW -->
+    <!-- 3. MENU VIEW (SUBTRACTION CAREFULLY SPLIT) -->
     <div id="menu-view">
       <div class="section-label">🇬🇧 UK Year 1 Curriculum Practice</div>
       <div class="menu-grid">
         <button class="menu-btn btn-c-1" onclick="startMode('add10')">1. Addition ≤ 10</button>
-        <button class="menu-btn btn-c-2" onclick="startMode('sub10')">2. Subtraction (≤ 20)</button>
-        <button class="menu-btn btn-c-3" onclick="startMode('make10')">3. Make 10 Addition (11-20)</button>
-        <button class="menu-btn btn-c-4" onclick="startMode('bonds')">4. Number Bonds (10 & 20)</button>
-        <button class="menu-btn btn-c-5" onclick="startMode('doubles')">5. Doubles & Halves</button>
-        <button class="menu-btn btn-c-6" onclick="startMode('moreless')">6. More / Less (±1, ±2, ±10)</button>
-        <button class="menu-btn btn-c-7" onclick="startMode('skip')">7. Frog Skip Counting (2, 5, 10)</button>
-        <button class="menu-btn btn-c-8" onclick="startMode('compare')">8. Compare (&gt;, &lt;, =)</button>
-        <button class="menu-btn btn-c-9" style="grid-column: span 2;" onclick="startMode('mixed')">9. All Mixed Revision</button>
+        <button class="menu-btn btn-c-2" onclick="startMode('sub10')">2. Subtraction ≤ 10</button>
+        <button class="menu-btn btn-c-2b" onclick="startMode('sub20_nocross')">3. Subtraction ≤ 20 (No Crossing 10)</button>
+        <button class="menu-btn btn-c-2c" onclick="startMode('sub20_cross')">4. Subtraction (Crossing 10 / 借位)</button>
+        <button class="menu-btn btn-c-3" onclick="startMode('make10')">5. Make 10 Addition (11-20)</button>
+        <button class="menu-btn btn-c-4" onclick="startMode('bonds')">6. Number Bonds (10 & 20)</button>
+        <button class="menu-btn btn-c-5" onclick="startMode('doubles')">7. Doubles & Halves</button>
+        <button class="menu-btn btn-c-6" onclick="startMode('moreless')">8. More / Less (±1, ±2, ±10)</button>
+        <button class="menu-btn btn-c-7" onclick="startMode('skip')">9. Frog Skip Counting (2, 5, 10)</button>
+        <button class="menu-btn btn-c-8" onclick="startMode('compare')">10. Compare (&gt;, &lt;, =)</button>
+        <button class="menu-btn btn-c-9" style="grid-column: span 2;" onclick="startMode('mixed')">11. All Mixed Revision</button>
       </div>
 
       <div class="section-label">⚡ Time & Speed Challenges</div>
@@ -923,7 +865,6 @@ function playPop() {
   osc.stop(ctx.currentTime + 0.08);
 }
 
-// 青蛙跳躍專屬音效
 function playFrogJumpSound() {
   initAudio();
   const now = ctx.currentTime;
@@ -1064,7 +1005,7 @@ function triggerConfetti() {
   draw();
 }
 
-// --- USER & DATA PERSISTENCE ---
+// --- USER & PERSISTENCE ---
 let currentUser = null;
 let userData = null;
 
@@ -1282,19 +1223,23 @@ let q_paramStep = 1;
 let q_type = '';
 let make10_moved = 0;
 
-// Variables for Skip Counting Frog Line
+// Skip Counting Frog Line
 let skip_step = 2;
 let skip_seq = [];
 let skip_blankIdx = 0;
 
-// Variables for interactive Halves Fair-Share
+// Halves Fair-Share
 let half_sharedCount = 0;
 let isDoubleQuestion = true;
 
 // Keyboard input buffer
 let keyboardBuffer = '';
 
-const ALL_CURRICULUM_MODES = ['add10','sub10','make10','bonds','doubles','moreless','skip','compare'];
+// ALL_CURRICULUM_MODES now includes distinct subtraction categories
+const ALL_CURRICULUM_MODES = [
+  'add10', 'sub10', 'sub20_nocross', 'sub20_cross',
+  'make10', 'bonds', 'doubles', 'moreless', 'skip', 'compare'
+];
 
 function toggleVisual() {
   initAudio();
@@ -1422,7 +1367,7 @@ function exitToMenu() {
   updateDashboardUI();
 }
 
-// Question Generator
+// Year 1 Curriculum Question Builders with 3 DISTINCT SUBTRACTION MODES
 function nextQuestion() {
   isAnswered = false;
   keyboardBuffer = '';
@@ -1445,19 +1390,36 @@ function nextQuestion() {
     qBox.innerText = `${q_paramA} + ${q_paramB} = ?`;
     hBox.innerText = `Count 5 in each row: 🍪 = ${q_paramA}, 🍓 = ${q_paramB}`;
   } 
+  // 1. 10 以內減法
   else if (mode === 'sub10') {
-    document.getElementById('mode-badge').innerText = 'Subtraction ≤ 20';
-    const isTeen = Math.random() > 0.45;
-    if (isTeen) {
-      q_paramA = Math.floor(Math.random() * 10) + 11;
-      q_paramB = Math.floor(Math.random() * 8) + 1;
-    } else {
-      q_paramA = Math.floor(Math.random() * 6) + 4;
-      q_paramB = Math.floor(Math.random() * (q_paramA - 1)) + 1;
-    }
+    document.getElementById('mode-badge').innerText = 'Subtraction ≤ 10';
+    q_paramA = Math.floor(Math.random() * 7) + 4; // 4 至 10
+    q_paramB = Math.floor(Math.random() * (q_paramA - 1)) + 1;
     correctAns = q_paramA - q_paramB;
     qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
     hBox.innerText = `🦖 Dino chomps ${q_paramB} cookies! Tap or count remaining!`;
+  }
+  // 2. 20 以內不借位減法 (No Crossing 10)
+  else if (mode === 'sub20_nocross') {
+    document.getElementById('mode-badge').innerText = 'Sub ≤ 20 (No Crossing)';
+    const onesA = Math.floor(Math.random() * 6) + 4; // 個位 4 至 9
+    q_paramA = 10 + onesA; // 14 至 19
+    q_paramB = Math.floor(Math.random() * (onesA - 1)) + 1; // 減數小於個位數
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `💡 Keep the 10! Just subtract the ones: ${onesA} - ${q_paramB} = ${onesA - q_paramB}!`;
+  }
+  // 3. 20 以內退位／借位減法 (Crossing 10)
+  else if (mode === 'sub20_cross') {
+    document.getElementById('mode-badge').innerText = 'Sub Crossing 10 (借位)';
+    const onesA = Math.floor(Math.random() * 6) + 1; // 個位 1 至 6 (11 至 16)
+    q_paramA = 10 + onesA; 
+    // 減數必須大於個位數，強制跨穿 10
+    q_paramB = onesA + Math.floor(Math.random() * 3) + 2; 
+    if (q_paramB >= q_paramA) q_paramB = q_paramA - 1;
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `🦖 Chomp the ${onesA} stars first, then take from the 10 cookies!`;
   }
   else if (mode === 'make10') {
     document.getElementById('mode-badge').innerText = 'Make 10 Addition';
@@ -1521,7 +1483,6 @@ function nextQuestion() {
     skip_step = [2, 5, 10][Math.floor(Math.random() * 3)];
     const start = skip_step * (Math.floor(Math.random() * 3) + 1);
     
-    // 4 個步驟的序列
     skip_blankIdx = Math.floor(Math.random() * 4);
     skip_seq = [start, start + skip_step, start + skip_step * 2, start + skip_step * 3];
     correctAns = skip_seq[skip_blankIdx];
@@ -1564,60 +1525,152 @@ function renderQuestionVisual() {
     return;
   }
 
-  // 1. Skip Counting with Frog Jump Number Line
-  if (q_type === 'skip') {
+  // 1. Subtraction within 10
+  if (q_type === 'sub10') {
+    const grid = document.createElement('div');
+    grid.className = 'grid-5-group';
+    for (let i = 0; i < q_paramA; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      c.onclick = function() {
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
+        }
+      };
+      grid.appendChild(c);
+    }
+    board.appendChild(grid);
+  }
+  // 2. Subtraction within 20 (No Crossing 10) - 分組突顯 10 與個位
+  else if (q_type === 'sub20_nocross') {
+    const ones = q_paramA - 10;
+    const wrap = document.createElement('div');
+    wrap.className = 'sub-crossing-wrap';
+
+    const topBox = document.createElement('div');
+    topBox.className = 'sub-group-box';
+    topBox.innerHTML = `<div class="sub-group-title">🔒 Full 10 Safe: (10 cookies)</div>`;
+    const g10 = document.createElement('div');
+    g10.className = 'grid-5-group';
+    for (let i = 0; i < 10; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      g10.appendChild(c);
+    }
+    topBox.appendChild(g10);
+
+    const botBox = document.createElement('div');
+    botBox.className = 'sub-group-box';
+    botBox.innerHTML = `<div class="sub-group-title">🎯 Subtract ${q_paramB} from these ${ones} stars:</div>`;
+    const gOnes = document.createElement('div');
+    gOnes.className = 'grid-5-group';
+    for (let i = 0; i < ones; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '⭐';
+      c.onclick = function() {
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
+        }
+      };
+      gOnes.appendChild(c);
+    }
+    botBox.appendChild(gOnes);
+
+    wrap.appendChild(topBox);
+    wrap.appendChild(botBox);
+    board.appendChild(wrap);
+  }
+  // 3. Subtraction within 20 (Crossing 10 借位)
+  else if (q_type === 'sub20_cross') {
+    const ones = q_paramA - 10;
+    const wrap = document.createElement('div');
+    wrap.className = 'sub-crossing-wrap';
+
+    const onesBox = document.createElement('div');
+    onesBox.className = 'sub-group-box';
+    onesBox.innerHTML = `<div class="sub-group-title">1️⃣ Chomp these ${ones} stars first:</div>`;
+    const gOnes = document.createElement('div');
+    gOnes.className = 'grid-5-group';
+    for (let i = 0; i < ones; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '⭐';
+      c.onclick = function() {
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
+        }
+      };
+      gOnes.appendChild(c);
+    }
+    onesBox.appendChild(gOnes);
+
+    const tenBox = document.createElement('div');
+    tenBox.className = 'sub-group-box';
+    tenBox.innerHTML = `<div class="sub-group-title">2️⃣ Then chomp ${q_paramB - ones} more from the 10 cookies:</div>`;
+    const g10 = document.createElement('div');
+    g10.className = 'grid-5-group';
+    for (let i = 0; i < 10; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      c.onclick = function() {
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
+        }
+      };
+      g10.appendChild(c);
+    }
+    tenBox.appendChild(g10);
+
+    wrap.appendChild(onesBox);
+    wrap.appendChild(tenBox);
+    board.appendChild(wrap);
+  }
+  // Skip Counting
+  else if (q_type === 'skip') {
     const wrap = document.createElement('div');
     wrap.className = 'frog-numberline-box';
-
-    // 4 個座標定位
     const xCoords = [55, 155, 255, 355];
     const yAxis = 88;
 
     let svgHtml = `
       <svg class="frog-svg-wrap" viewBox="0 0 410 120">
-        <!-- Main number line axis -->
         <line x1="25" y1="${yAxis}" x2="385" y2="${yAxis}" class="nl-axis-line" />
         <polygon points="385,${yAxis - 6} 397,${yAxis} 385,${yAxis + 6}" fill="#2e7d32" />
     `;
 
-    // 繪製跳躍弧線
     for (let i = 0; i < 3; i++) {
       const x1 = xCoords[i];
       const x2 = xCoords[i + 1];
       const mx = (x1 + x2) / 2;
-      const my = 32; // 弧形頂點
+      const my = 32;
       svgHtml += `
         <path d="M ${x1} ${yAxis - 8} Q ${mx} ${my}, ${x2} ${yAxis - 8}" class="nl-arc-jump" />
         <text x="${mx}" y="${my - 3}" class="nl-jump-label">+${skip_step}</text>
       `;
     }
 
-    // 繪製刻度與數字
     skip_seq.forEach((num, idx) => {
       const cx = xCoords[idx];
       svgHtml += `<line x1="${cx}" y1="${yAxis - 8}" x2="${cx}" y2="${yAxis + 8}" class="nl-tick-line" />`;
-
       if (idx === skip_blankIdx) {
-        // 金色問號箱
         svgHtml += `
           <circle cx="${cx}" cy="${yAxis + 20}" r="14" class="nl-question-circle" />
           <text x="${cx}" y="${yAxis + 25}" class="nl-question-text">?</text>
         `;
       } else {
-        svgHtml += `
-          <text x="${cx}" y="${yAxis + 25}" class="nl-number-text">${num}</text>
-        `;
+        svgHtml += `<text x="${cx}" y="${yAxis + 25}" class="nl-number-text">${num}</text>`;
       }
     });
 
-    // 放置青蛙位置 (放置在問號前一步，若第0格是問號則置於起點)
-    let frogX = 25;
-    if (skip_blankIdx === 0) {
-      frogX = 35;
-    } else {
-      frogX = xCoords[skip_blankIdx - 1] - 16;
-    }
-
+    let frogX = (skip_blankIdx === 0) ? 35 : (xCoords[skip_blankIdx - 1] - 16);
     svgHtml += `
       <g transform="translate(${frogX}, 6)">
         <text class="frog-avatar-icon">🐸</text>
@@ -1641,23 +1694,6 @@ function renderQuestionVisual() {
       const c = document.createElement('div');
       c.className = 'grid-item-cell';
       c.innerText = '🍓';
-      grid.appendChild(c);
-    }
-    board.appendChild(grid);
-  }
-  else if (q_type === 'sub10') {
-    const grid = document.createElement('div');
-    grid.className = 'grid-5-group';
-    for (let i = 0; i < q_paramA; i++) {
-      const c = document.createElement('div');
-      c.className = 'grid-item-cell';
-      c.innerText = '🍪';
-      c.onclick = function() {
-        if (!isAnswered) {
-          this.classList.toggle('eaten');
-          playDinoChomp();
-        }
-      };
       grid.appendChild(c);
     }
     board.appendChild(grid);
@@ -1746,7 +1782,6 @@ function renderQuestionVisual() {
     } else {
       const hWrap = document.createElement('div');
       hWrap.className = 'halves-container';
-
       const unshared = q_paramA - half_sharedCount;
       const leftShare = Math.ceil(half_sharedCount / 2);
       const rightShare = Math.floor(half_sharedCount / 2);
@@ -1764,7 +1799,6 @@ function renderQuestionVisual() {
         item.style.fontSize = '26px';
         item.style.cursor = 'pointer';
         item.innerText = '🍓';
-        item.title = 'Tap to share between dinos!';
         item.onclick = () => {
           if (!isAnswered && half_sharedCount < q_paramA) {
             playPop();
@@ -1780,7 +1814,6 @@ function renderQuestionVisual() {
 
       const traysWrap = document.createElement('div');
       traysWrap.className = 'halves-trays-wrap';
-
       const tray1 = document.createElement('div');
       tray1.className = 'halves-tray';
       tray1.innerHTML = `<div style="font-weight: bold; font-size: 13px;">🦖 Dino Rex (${leftShare})</div>`;
@@ -1799,7 +1832,6 @@ function renderQuestionVisual() {
 
       traysWrap.appendChild(tray1);
       traysWrap.appendChild(tray2);
-
       hWrap.appendChild(poolTitle);
       hWrap.appendChild(pool);
       hWrap.appendChild(traysWrap);
@@ -1845,7 +1877,6 @@ function renderQuestionVisual() {
   }
 }
 
-// UPDATE CLEAN BLANK INPUT BOX
 function updateKeyboardPreview() {
   const el = document.getElementById('keyboard-preview');
   if (keyboardBuffer.length > 0) {
@@ -1857,7 +1888,6 @@ function updateKeyboardPreview() {
   }
 }
 
-// 12-KEY KEYPAD (CALCULATOR STYLE)
 function renderKeypad() {
   const box = document.getElementById('options-box');
   box.innerHTML = '';
@@ -1983,7 +2013,6 @@ function showChallengeResult(title, desc) {
   document.getElementById('result-modal').style.display = 'flex';
 }
 
-// Physical keyboard listener
 window.addEventListener('keydown', (e) => {
   const gameView = document.getElementById('game-view');
   if (!gameView || gameView.style.display !== 'block' || isAnswered) return;
