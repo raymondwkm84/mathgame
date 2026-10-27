@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dino Year 1 Math Adventure</title>
 <style>
+  /* =========================================
+     1. BASE STYLING
+     ========================================= */
   body {
     font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
     background-color: #f4f9f4;
@@ -26,7 +29,9 @@
   }
   h1 { font-size: 24px; color: #2e7d32; margin: 0 0 8px 0; }
 
-  /* Login Panel */
+  /* =========================================
+     2. LOGIN PANEL
+     ========================================= */
   #login-view {
     display: flex;
     flex-direction: column;
@@ -56,7 +61,9 @@
     cursor: pointer;
   }
 
-  /* Status Dashboard */
+  /* =========================================
+     3. STATUS DASHBOARD & HEADER
+     ========================================= */
   .status-header {
     background: #e8f5e9;
     padding: 8px 12px;
@@ -88,12 +95,8 @@
     border-radius: 10px;
     cursor: pointer;
   }
-  .user-badge {
-    color: #2e7d32;
-    font-size: 14px;
-  }
+  .user-badge { color: #2e7d32; font-size: 14px; }
 
-  /* Daily 30 Progress Bar */
   .daily-progress-container {
     width: 100%;
     background: #c8e6c9;
@@ -110,7 +113,23 @@
     transition: width 0.4s ease;
   }
 
-  /* Mascot Display with Hat layer */
+  .toast-banner {
+    display: none;
+    background: #fff9c4;
+    border: 2px solid #fbc02d;
+    color: #e65100;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    animation: bounce 0.6s ease;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
   .dino-avatar-wrap {
     position: relative;
     display: inline-block;
@@ -126,8 +145,10 @@
     pointer-events: none;
   }
 
-  /* Menu Layout */
-  #menu-view { display: none; }
+  /* =========================================
+     4. MENUS & SUBMENUS
+     ========================================= */
+  #menu-view, #submenu-add-view, #submenu-sub-view { display: none; }
   .section-label {
     text-align: left;
     font-size: 13px;
@@ -142,8 +163,8 @@
     gap: 8px;
   }
   .menu-btn {
-    padding: 10px 6px;
-    font-size: 13.5px;
+    padding: 12px 6px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
     border-radius: 14px;
@@ -155,6 +176,9 @@
     line-height: 1.25;
   }
   .menu-btn:active { transform: translateY(2px); box-shadow: none; }
+
+  .btn-group-add { background: linear-gradient(135deg, #43a047, #2e7d32); font-size: 16px; padding: 16px 8px; }
+  .btn-group-sub { background: linear-gradient(135deg, #fb8c00, #e65100); font-size: 16px; padding: 16px 8px; }
   
   .btn-c-1 { background: #4caf50; }
   .btn-c-2 { background: #ff9800; }
@@ -186,7 +210,9 @@
     color: white;
   }
 
-  /* Game View */
+  /* =========================================
+     5. GAME VIEW & VISUALS
+     ========================================= */
   #game-view { display: none; }
   .top-bar {
     display: flex;
@@ -220,7 +246,7 @@
     border-radius: 10px;
   }
 
-  /* Bomb Timer Widget */
+  /* Bomb Rush Visual */
   .bomb-timer-widget {
     display: inline-flex;
     flex-direction: column;
@@ -238,19 +264,8 @@
     overflow: visible;
     z-index: 1;
   }
-  .bomb-fuse-track {
-    fill: none;
-    stroke: #d7ccc8;
-    stroke-width: 3.5;
-    stroke-linecap: round;
-  }
-  .bomb-fuse-burn {
-    fill: none;
-    stroke: #8d6e63;
-    stroke-width: 3.5;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.8s linear;
-  }
+  .bomb-fuse-track { fill: none; stroke: #d7ccc8; stroke-width: 3.5; stroke-linecap: round; }
+  .bomb-fuse-burn { fill: none; stroke: #8d6e63; stroke-width: 3.5; stroke-linecap: round; transition: stroke-dashoffset 0.8s linear; }
   .bomb-sparkle {
     position: absolute;
     font-size: 14px;
@@ -264,7 +279,6 @@
     0% { transform: scale(0.9) rotate(0deg); }
     100% { transform: scale(1.3) rotate(20deg); }
   }
-
   .bomb-cap {
     width: 22px;
     height: 8px;
@@ -310,9 +324,7 @@
     letter-spacing: 0.5px;
     z-index: 3;
   }
-  .bomb-critical {
-    animation: bombPulse 0.4s infinite alternate, shake 0.2s infinite;
-  }
+  .bomb-critical { animation: bombPulse 0.4s infinite alternate, shake 0.2s infinite; }
   @keyframes bombPulse {
     0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff1744); }
     100% { transform: scale(1.08); filter: drop-shadow(0 0 14px #ff1744); }
@@ -347,7 +359,6 @@
     overflow: hidden;
   }
 
-  /* 5-in-a-row layout */
   .grid-5-group {
     display: grid;
     grid-template-columns: repeat(5, 46px);
@@ -374,7 +385,7 @@
     background: #eee;
   }
 
-  /* Crossing 10 Decomposed Groups */
+  /* Subtraction Split Views */
   .sub-crossing-wrap {
     display: flex;
     flex-direction: column;
@@ -422,7 +433,7 @@
     font-weight: bold;
   }
 
-  /* Half Fair-Share Visual */
+  /* Halves Visual */
   .halves-container {
     display: flex;
     flex-direction: column;
@@ -466,7 +477,7 @@
     margin-top: 4px;
   }
 
-  /* Comparison Container */
+  /* Compare Panels */
   .compare-container {
     display: flex;
     align-items: center;
@@ -481,14 +492,9 @@
     padding: 8px;
     min-width: 110px;
   }
-  .compare-panel-title {
-    font-weight: bold;
-    font-size: 14px;
-    color: #0288d1;
-    margin-bottom: 4px;
-  }
+  .compare-panel-title { font-weight: bold; font-size: 14px; color: #0288d1; margin-bottom: 4px; }
 
-  /* Ten Frame */
+  /* Ten-Frames */
   .ten-frame-container {
     display: flex;
     flex-direction: column;
@@ -558,7 +564,6 @@
   .frog-avatar-icon { font-size: 32px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); animation: frogBounce 1s infinite alternate ease-in-out; }
   @keyframes frogBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-7px); } }
 
-  /* Mental Box */
   .mental-box {
     background: #ffffff;
     border: 2px dashed #b0bec5;
@@ -569,7 +574,7 @@
     font-weight: bold;
   }
 
-  /* Clean Blank Input Preview Box */
+  /* Input Preview */
   .keyboard-input-preview {
     display: inline-flex;
     align-items: center;
@@ -592,7 +597,7 @@
     box-shadow: 0 0 8px rgba(46, 125, 50, 0.25);
   }
 
-  /* Buttons */
+  /* Keypad */
   .options-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -641,7 +646,6 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
 
-  /* Shop Grid */
   .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
   .shop-card { border: 2px solid #eee; border-radius: 12px; padding: 8px; background: #fafafa; }
   .shop-card.owned { border-color: #27ae60; background: #e8f8f5; }
@@ -649,7 +653,6 @@
   .btn-buy { background: #f39c12; color: white; }
   .btn-wear { background: #27ae60; color: white; }
 
-  /* Analytics Table */
   .stat-card { background: #f8f9fa; border-radius: 12px; padding: 10px; margin: 8px 0; text-align: left; font-size: 14px; }
   .stat-highlight { font-size: 18px; font-weight: bold; color: #2e7d32; }
 
@@ -704,21 +707,27 @@
       </div>
     </div>
 
-    <!-- 3. MENU VIEW (SUBTRACTION CAREFULLY SPLIT) -->
+    <!-- NON-INTRUSIVE DAILY CELEBRATION TOAST -->
+    <div id="toast-banner" class="toast-banner">
+      🎉 Awesome stamina! You completed 30 questions today! +5 Bonus Coins! 🪙
+    </div>
+
+    <!-- 3. MAIN MENU VIEW -->
     <div id="menu-view">
-      <div class="section-label">🇬🇧 UK Year 1 Curriculum Practice</div>
+      <div class="section-label">🇬🇧 UK Year 1 Math Worlds</div>
       <div class="menu-grid">
-        <button class="menu-btn btn-c-1" onclick="startMode('add10')">1. Addition ≤ 10</button>
-        <button class="menu-btn btn-c-2" onclick="startMode('sub10')">2. Subtraction ≤ 10</button>
-        <button class="menu-btn btn-c-2b" onclick="startMode('sub20_nocross')">3. Subtraction ≤ 20 (No Crossing 10)</button>
-        <button class="menu-btn btn-c-2c" onclick="startMode('sub20_cross')">4. Subtraction (Crossing 10 / 借位)</button>
-        <button class="menu-btn btn-c-3" onclick="startMode('make10')">5. Make 10 Addition (11-20)</button>
-        <button class="menu-btn btn-c-4" onclick="startMode('bonds')">6. Number Bonds (10 & 20)</button>
-        <button class="menu-btn btn-c-5" onclick="startMode('doubles')">7. Doubles & Halves</button>
-        <button class="menu-btn btn-c-6" onclick="startMode('moreless')">8. More / Less (±1, ±2, ±10)</button>
-        <button class="menu-btn btn-c-7" onclick="startMode('skip')">9. Frog Skip Counting (2, 5, 10)</button>
-        <button class="menu-btn btn-c-8" onclick="startMode('compare')">10. Compare (&gt;, &lt;, =)</button>
-        <button class="menu-btn btn-c-9" style="grid-column: span 2;" onclick="startMode('mixed')">11. All Mixed Revision</button>
+        <button class="menu-btn btn-group-add" onclick="showSubMenu('add')">➕ Addition World<br><small style="font-size: 11px; opacity: 0.9;">≤10, Make 10, Mixed</small></button>
+        <button class="menu-btn btn-group-sub" onclick="showSubMenu('sub')">➖ Subtraction World<br><small style="font-size: 11px; opacity: 0.9;">≤10, ≤20, Crossing 10, Mixed</small></button>
+      </div>
+
+      <div class="section-label">🎯 Other Foundation Modules</div>
+      <div class="menu-grid">
+        <button class="menu-btn btn-c-4" onclick="startMode('bonds')">Number Bonds (10 & 20)</button>
+        <button class="menu-btn btn-c-5" onclick="startMode('doubles')">Doubles & Halves</button>
+        <button class="menu-btn btn-c-6" onclick="startMode('moreless')">More / Less (±1, ±2, ±10)</button>
+        <button class="menu-btn btn-c-7" onclick="startMode('skip')">Frog Skip (2, 5, 10)</button>
+        <button class="menu-btn btn-c-8" onclick="startMode('compare')">Compare (&gt;, &lt;, =)</button>
+        <button class="menu-btn btn-c-9" onclick="startMode('mixed')">🔀 All Mixed Revision</button>
       </div>
 
       <div class="section-label">⚡ Time & Speed Challenges</div>
@@ -733,10 +742,39 @@
       </div>
     </div>
 
+    <!-- 3A. SUBMENU: ADDITION WORLD -->
+    <div id="submenu-add-view">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <button class="btn-back" onclick="backToMainMenu()">◀ Main Menu</button>
+        <h3 style="margin: 0; color: #2e7d32;">➕ Addition World</h3>
+        <div style="width: 70px;"></div>
+      </div>
+      <div class="menu-grid">
+        <button class="menu-btn btn-c-1" style="grid-column: span 2; padding: 14px;" onclick="startMode('add10')">1. Addition ≤ 10</button>
+        <button class="menu-btn btn-c-3" style="grid-column: span 2; padding: 14px;" onclick="startMode('make10')">2. Make 10 Addition (11-20)</button>
+        <button class="menu-btn" style="grid-column: span 2; padding: 15px; background: linear-gradient(135deg, #2e7d32, #1b5e20);" onclick="startMode('mixed_add')">3. 🔀 Mixed Addition (All Stages)</button>
+      </div>
+    </div>
+
+    <!-- 3B. SUBMENU: SUBTRACTION WORLD -->
+    <div id="submenu-sub-view">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <button class="btn-back" onclick="backToMainMenu()">◀ Main Menu</button>
+        <h3 style="margin: 0; color: #e65100;">➖ Subtraction World</h3>
+        <div style="width: 70px;"></div>
+      </div>
+      <div class="menu-grid">
+        <button class="menu-btn btn-c-2" style="grid-column: span 2; padding: 13px;" onclick="startMode('sub10')">1. Subtraction ≤ 10</button>
+        <button class="menu-btn btn-c-2b" style="grid-column: span 2; padding: 13px;" onclick="startMode('sub20_nocross')">2. Subtraction ≤ 20 (No Crossing 10)</button>
+        <button class="menu-btn btn-c-2c" style="grid-column: span 2; padding: 13px;" onclick="startMode('sub20_cross')">3. Subtraction ≤ 20 (Crossing 10)</button>
+        <button class="menu-btn" style="grid-column: span 2; padding: 15px; background: linear-gradient(135deg, #e65100, #bf360c);" onclick="startMode('mixed_sub')">4. 🔀 Mixed Subtraction (All Stages)</button>
+      </div>
+    </div>
+
     <!-- 4. GAME VIEW -->
     <div id="game-view">
       <div class="top-bar">
-        <button class="btn-back" onclick="exitToMenu()">◀ Menu</button>
+        <button class="btn-back" onclick="exitToMenu()">◀ Back</button>
         <div class="mode-badge" id="mode-badge">Mode</div>
         <div id="game-timer-container">
           <div class="timer-banner" id="game-timer">Practice</div>
@@ -803,7 +841,9 @@
 </div>
 
 <script>
-// --- AUDIO SYNTHESIS ENGINE ---
+/* =========================================
+   6. AUDIO ENGINE (SYNTHESIZED WEB AUDIO API)
+   ========================================= */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let ctx;
 function initAudio() {
@@ -953,7 +993,9 @@ function playBombExplosion() {
   noise.stop(now + 0.8);
 }
 
-// --- CONFETTI ENGINE ---
+/* =========================================
+   7. CONFETTI ANIMATION ENGINE
+   ========================================= */
 function triggerConfetti() {
   const canvas = document.getElementById('confetti-canvas');
   const cctx = canvas.getContext('2d');
@@ -1005,7 +1047,9 @@ function triggerConfetti() {
   draw();
 }
 
-// --- USER & PERSISTENCE ---
+/* =========================================
+   8. USER STATE & LOCAL STORAGE PERSISTENCE
+   ========================================= */
 let currentUser = null;
 let userData = null;
 
@@ -1105,7 +1149,36 @@ function updateDashboardUI() {
   document.getElementById('equipped-hat').innerText = hatIcon;
 }
 
-// --- SHOP ENGINE ---
+/* =========================================
+   9. SUBMENU NAVIGATION LOGIC
+   ========================================= */
+let currentSubMenu = '';
+
+function showSubMenu(type) {
+  initAudio();
+  playPop();
+  document.getElementById('menu-view').style.display = 'none';
+  if (type === 'add') {
+    currentSubMenu = 'add';
+    document.getElementById('submenu-add-view').style.display = 'block';
+  } else if (type === 'sub') {
+    currentSubMenu = 'sub';
+    document.getElementById('submenu-sub-view').style.display = 'block';
+  }
+}
+
+function backToMainMenu() {
+  initAudio();
+  playPop();
+  document.getElementById('submenu-add-view').style.display = 'none';
+  document.getElementById('submenu-sub-view').style.display = 'none';
+  document.getElementById('menu-view').style.display = 'block';
+  currentSubMenu = '';
+}
+
+/* =========================================
+   10. SHOP & ANALYTICS MODALS
+   ========================================= */
 const SHOP_ITEMS = [
   { id: 'crown', name: 'Royal Crown', icon: '👑', cost: 10 },
   { id: 'shades', name: 'Cool Shades', icon: '😎', cost: 15 },
@@ -1174,7 +1247,6 @@ function closeModal(id) {
   document.getElementById(id).style.display = 'none';
 }
 
-// --- LEARNING ANALYTICS ENGINE ---
 function openAnalytics() {
   initAudio();
   playPop();
@@ -1204,7 +1276,9 @@ function openAnalytics() {
   document.getElementById('analytics-modal').style.display = 'flex';
 }
 
-// --- GAME LOGIC & CURRICULUM GENERATOR ---
+/* =========================================
+   11. GAMEPLAY & QUESTION GENERATOR
+   ========================================= */
 let activeMode = '';
 let activeChallenge = '';
 let isChallenge = false;
@@ -1216,26 +1290,21 @@ let isAnswered = false;
 let correctAns = null;
 let showVisual = true;
 
-// Question state
 let q_paramA = 0;
 let q_paramB = 0;
 let q_paramStep = 1;
 let q_type = '';
 let make10_moved = 0;
 
-// Skip Counting Frog Line
 let skip_step = 2;
 let skip_seq = [];
 let skip_blankIdx = 0;
 
-// Halves Fair-Share
 let half_sharedCount = 0;
 let isDoubleQuestion = true;
 
-// Keyboard input buffer
 let keyboardBuffer = '';
 
-// ALL_CURRICULUM_MODES now includes distinct subtraction categories
 const ALL_CURRICULUM_MODES = [
   'add10', 'sub10', 'sub20_nocross', 'sub20_cross',
   'make10', 'bonds', 'doubles', 'moreless', 'skip', 'compare'
@@ -1256,6 +1325,8 @@ function startMode(mode) {
   activeMode = mode;
   isChallenge = false;
   document.getElementById('menu-view').style.display = 'none';
+  document.getElementById('submenu-add-view').style.display = 'none';
+  document.getElementById('submenu-sub-view').style.display = 'none';
   document.getElementById('game-view').style.display = 'block';
   updateTimerBanner('Practice');
   nextQuestion();
@@ -1268,6 +1339,8 @@ function startChallenge(chType) {
   isChallenge = true;
   challengeQCount = 0;
   document.getElementById('menu-view').style.display = 'none';
+  document.getElementById('submenu-add-view').style.display = 'none';
+  document.getElementById('submenu-sub-view').style.display = 'none';
   document.getElementById('game-view').style.display = 'block';
 
   clearInterval(challengeInterval);
@@ -1363,11 +1436,17 @@ function exitToMenu() {
   document.getElementById('game-timer-container').innerHTML = '';
   document.getElementById('game-view').classList.remove('bomb-shake');
   document.getElementById('game-view').style.display = 'none';
-  document.getElementById('menu-view').style.display = 'block';
+
+  if (currentSubMenu === 'add') {
+    document.getElementById('submenu-add-view').style.display = 'block';
+  } else if (currentSubMenu === 'sub') {
+    document.getElementById('submenu-sub-view').style.display = 'block';
+  } else {
+    document.getElementById('menu-view').style.display = 'block';
+  }
   updateDashboardUI();
 }
 
-// Year 1 Curriculum Question Builders with 3 DISTINCT SUBTRACTION MODES
 function nextQuestion() {
   isAnswered = false;
   keyboardBuffer = '';
@@ -1376,59 +1455,65 @@ function nextQuestion() {
   questionStartTime = Date.now();
 
   let mode = isChallenge ? ALL_CURRICULUM_MODES[Math.floor(Math.random() * ALL_CURRICULUM_MODES.length)] : activeMode;
-  if (mode === 'mixed') mode = ALL_CURRICULUM_MODES[Math.floor(Math.random() * ALL_CURRICULUM_MODES.length)];
+  
+  if (mode === 'mixed') {
+    mode = ALL_CURRICULUM_MODES[Math.floor(Math.random() * ALL_CURRICULUM_MODES.length)];
+  } else if (mode === 'mixed_add') {
+    const addChoices = ['add10', 'make10'];
+    mode = addChoices[Math.floor(Math.random() * addChoices.length)];
+  } else if (mode === 'mixed_sub') {
+    const subChoices = ['sub10', 'sub20_nocross', 'sub20_cross'];
+    mode = subChoices[Math.floor(Math.random() * subChoices.length)];
+  }
+
   q_type = mode;
 
   const qBox = document.getElementById('question-text');
   const hBox = document.getElementById('hint-text');
 
   if (mode === 'add10') {
-    document.getElementById('mode-badge').innerText = 'Addition ≤ 10';
+    document.getElementById('mode-badge').innerText = (activeMode === 'mixed_add' ? '🔀 Mixed Add: ' : '') + 'Addition ≤ 10';
     q_paramA = Math.floor(Math.random() * 5) + 1;
     q_paramB = Math.floor(Math.random() * (10 - q_paramA)) + 1;
     correctAns = q_paramA + q_paramB;
     qBox.innerText = `${q_paramA} + ${q_paramB} = ?`;
     hBox.innerText = `Count 5 in each row: 🍪 = ${q_paramA}, 🍓 = ${q_paramB}`;
   } 
-  // 1. 10 以內減法
-  else if (mode === 'sub10') {
-    document.getElementById('mode-badge').innerText = 'Subtraction ≤ 10';
-    q_paramA = Math.floor(Math.random() * 7) + 4; // 4 至 10
-    q_paramB = Math.floor(Math.random() * (q_paramA - 1)) + 1;
-    correctAns = q_paramA - q_paramB;
-    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
-    hBox.innerText = `🦖 Dino chomps ${q_paramB} cookies! Tap or count remaining!`;
-  }
-  // 2. 20 以內不借位減法 (No Crossing 10)
-  else if (mode === 'sub20_nocross') {
-    document.getElementById('mode-badge').innerText = 'Sub ≤ 20 (No Crossing)';
-    const onesA = Math.floor(Math.random() * 6) + 4; // 個位 4 至 9
-    q_paramA = 10 + onesA; // 14 至 19
-    q_paramB = Math.floor(Math.random() * (onesA - 1)) + 1; // 減數小於個位數
-    correctAns = q_paramA - q_paramB;
-    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
-    hBox.innerText = `💡 Keep the 10! Just subtract the ones: ${onesA} - ${q_paramB} = ${onesA - q_paramB}!`;
-  }
-  // 3. 20 以內退位／借位減法 (Crossing 10)
-  else if (mode === 'sub20_cross') {
-    document.getElementById('mode-badge').innerText = 'Sub Crossing 10 (借位)';
-    const onesA = Math.floor(Math.random() * 6) + 1; // 個位 1 至 6 (11 至 16)
-    q_paramA = 10 + onesA; 
-    // 減數必須大於個位數，強制跨穿 10
-    q_paramB = onesA + Math.floor(Math.random() * 3) + 2; 
-    if (q_paramB >= q_paramA) q_paramB = q_paramA - 1;
-    correctAns = q_paramA - q_paramB;
-    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
-    hBox.innerText = `🦖 Chomp the ${onesA} stars first, then take from the 10 cookies!`;
-  }
   else if (mode === 'make10') {
-    document.getElementById('mode-badge').innerText = 'Make 10 Addition';
+    document.getElementById('mode-badge').innerText = (activeMode === 'mixed_add' ? '🔀 Mixed Add: ' : '') + 'Make 10 Addition';
     q_paramA = Math.floor(Math.random() * 3) + 7;
     q_paramB = Math.floor(Math.random() * 5) + 3;
     correctAns = q_paramA + q_paramB;
     make10_moved = 0;
     qBox.innerText = `${q_paramA} + ${q_paramB} = ?`;
     hBox.innerText = `Move stars to make 10 in the Ten-Frame!`;
+  }
+  else if (mode === 'sub10') {
+    document.getElementById('mode-badge').innerText = (activeMode === 'mixed_sub' ? '🔀 Mixed Sub: ' : '') + 'Subtraction ≤ 10';
+    q_paramA = Math.floor(Math.random() * 7) + 4;
+    q_paramB = Math.floor(Math.random() * (q_paramA - 1)) + 1;
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `🦖 Dino chomps ${q_paramB} cookies! Tap or count remaining!`;
+  }
+  else if (mode === 'sub20_nocross') {
+    document.getElementById('mode-badge').innerText = (activeMode === 'mixed_sub' ? '🔀 Mixed Sub: ' : '') + 'Sub ≤ 20 (No Crossing)';
+    const onesA = Math.floor(Math.random() * 6) + 4;
+    q_paramA = 10 + onesA; 
+    q_paramB = Math.floor(Math.random() * (onesA - 1)) + 1;
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `💡 Keep the 10! Just subtract the ones: ${onesA} - ${q_paramB} = ${onesA - q_paramB}!`;
+  }
+  else if (mode === 'sub20_cross') {
+    document.getElementById('mode-badge').innerText = (activeMode === 'mixed_sub' ? '🔀 Mixed Sub: ' : '') + 'Sub ≤ 20 (Crossing 10)';
+    const onesA = Math.floor(Math.random() * 6) + 1; 
+    q_paramA = 10 + onesA; 
+    q_paramB = onesA + Math.floor(Math.random() * 3) + 2; 
+    if (q_paramB >= q_paramA) q_paramB = q_paramA - 1;
+    correctAns = q_paramA - q_paramB;
+    qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
+    hBox.innerText = `🦖 Chomp the ${onesA} stars first, then take from the 10 cookies!`;
   }
   else if (mode === 'bonds') {
     document.getElementById('mode-badge').innerText = 'Number Bonds';
@@ -1525,7 +1610,6 @@ function renderQuestionVisual() {
     return;
   }
 
-  // 1. Subtraction within 10
   if (q_type === 'sub10') {
     const grid = document.createElement('div');
     grid.className = 'grid-5-group';
@@ -1543,7 +1627,6 @@ function renderQuestionVisual() {
     }
     board.appendChild(grid);
   }
-  // 2. Subtraction within 20 (No Crossing 10) - 分組突顯 10 與個位
   else if (q_type === 'sub20_nocross') {
     const ones = q_paramA - 10;
     const wrap = document.createElement('div');
@@ -1585,7 +1668,6 @@ function renderQuestionVisual() {
     wrap.appendChild(botBox);
     board.appendChild(wrap);
   }
-  // 3. Subtraction within 20 (Crossing 10 借位)
   else if (q_type === 'sub20_cross') {
     const ones = q_paramA - 10;
     const wrap = document.createElement('div');
@@ -1633,7 +1715,6 @@ function renderQuestionVisual() {
     wrap.appendChild(tenBox);
     board.appendChild(wrap);
   }
-  // Skip Counting
   else if (q_type === 'skip') {
     const wrap = document.createElement('div');
     wrap.className = 'frog-numberline-box';
@@ -1968,13 +2049,14 @@ function checkAnswer(chosen) {
       userData.celebratedToday = true;
       triggerConfetti();
       playGrandCelebrationSound();
-      setTimeout(() => {
-        showChallengeResult('🌟 Daily 30 Star Champion!', 'Incredible stamina! You achieved today\'s 30 questions goal! +5 Bonus Coins!');
-        userData.todayCoins += 5;
-        userData.totalCoins += 5;
-        saveUserData();
-        updateDashboardUI();
-      }, 500);
+      userData.todayCoins += 5;
+      userData.totalCoins += 5;
+
+      const toast = document.getElementById('toast-banner');
+      if (toast) {
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 6000);
+      }
     }
 
     saveUserData();
