@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dino Year 1 Math Adventure</title>
 <style>
-  /* =========================================
-     1. BASE STYLING
-     ========================================= */
   body {
     font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
     background-color: #f4f9f4;
@@ -29,9 +26,7 @@
   }
   h1 { font-size: 24px; color: #2e7d32; margin: 0 0 8px 0; }
 
-  /* =========================================
-     2. LOGIN PANEL
-     ========================================= */
+  /* Login Panel */
   #login-view {
     display: flex;
     flex-direction: column;
@@ -61,9 +56,7 @@
     cursor: pointer;
   }
 
-  /* =========================================
-     3. STATUS DASHBOARD & HEADER
-     ========================================= */
+  /* Status Dashboard */
   .status-header {
     background: #e8f5e9;
     padding: 8px 12px;
@@ -145,9 +138,7 @@
     pointer-events: none;
   }
 
-  /* =========================================
-     4. MENUS & SUBMENUS
-     ========================================= */
+  /* Menus Layout */
   #menu-view, #submenu-add-view, #submenu-sub-view { display: none; }
   .section-label {
     text-align: left;
@@ -210,9 +201,7 @@
     color: white;
   }
 
-  /* =========================================
-     5. GAME VIEW & VISUALS
-     ========================================= */
+  /* Game View */
   #game-view { display: none; }
   .top-bar {
     display: flex;
@@ -401,12 +390,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: all 0.2s;
   }
   .sub-group-title {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: bold;
-    color: #e65100;
     margin-bottom: 4px;
+  }
+
+  /* Safe locked warning animation */
+  .safe-shake {
+    animation: lockShake 0.4s ease;
+    border-color: #d32f2f !important;
+    background-color: #ffebee !important;
+  }
+  @keyframes lockShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
   }
 
   /* Double Mirror Visual */
@@ -841,9 +842,7 @@
 </div>
 
 <script>
-/* =========================================
-   6. AUDIO ENGINE (SYNTHESIZED WEB AUDIO API)
-   ========================================= */
+// --- AUDIO SYNTHESIS ENGINE ---
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let ctx;
 function initAudio() {
@@ -993,9 +992,7 @@ function playBombExplosion() {
   noise.stop(now + 0.8);
 }
 
-/* =========================================
-   7. CONFETTI ANIMATION ENGINE
-   ========================================= */
+// --- CONFETTI ENGINE ---
 function triggerConfetti() {
   const canvas = document.getElementById('confetti-canvas');
   const cctx = canvas.getContext('2d');
@@ -1047,9 +1044,7 @@ function triggerConfetti() {
   draw();
 }
 
-/* =========================================
-   8. USER STATE & LOCAL STORAGE PERSISTENCE
-   ========================================= */
+// --- USER & PERSISTENCE ---
 let currentUser = null;
 let userData = null;
 
@@ -1149,9 +1144,7 @@ function updateDashboardUI() {
   document.getElementById('equipped-hat').innerText = hatIcon;
 }
 
-/* =========================================
-   9. SUBMENU NAVIGATION LOGIC
-   ========================================= */
+// --- SUBMENU NAVIGATION ---
 let currentSubMenu = '';
 
 function showSubMenu(type) {
@@ -1176,9 +1169,7 @@ function backToMainMenu() {
   currentSubMenu = '';
 }
 
-/* =========================================
-   10. SHOP & ANALYTICS MODALS
-   ========================================= */
+// --- SHOP ENGINE ---
 const SHOP_ITEMS = [
   { id: 'crown', name: 'Royal Crown', icon: '👑', cost: 10 },
   { id: 'shades', name: 'Cool Shades', icon: '😎', cost: 15 },
@@ -1247,6 +1238,7 @@ function closeModal(id) {
   document.getElementById(id).style.display = 'none';
 }
 
+// --- LEARNING ANALYTICS ENGINE ---
 function openAnalytics() {
   initAudio();
   playPop();
@@ -1276,9 +1268,7 @@ function openAnalytics() {
   document.getElementById('analytics-modal').style.display = 'flex';
 }
 
-/* =========================================
-   11. GAMEPLAY & QUESTION GENERATOR
-   ========================================= */
+// --- GAME LOGIC & CURRICULUM GENERATOR ---
 let activeMode = '';
 let activeChallenge = '';
 let isChallenge = false;
@@ -1513,7 +1503,7 @@ function nextQuestion() {
     if (q_paramB >= q_paramA) q_paramB = q_paramA - 1;
     correctAns = q_paramA - q_paramB;
     qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
-    hBox.innerText = `🦖 Chomp the ${onesA} stars first, then take from the 10 cookies!`;
+    hBox.innerText = `⭐ Chomp all ${onesA} stars below first! Safe will unlock!`;
   }
   else if (mode === 'bonds') {
     document.getElementById('mode-badge').innerText = 'Number Bonds';
@@ -1634,7 +1624,7 @@ function renderQuestionVisual() {
 
     const topBox = document.createElement('div');
     topBox.className = 'sub-group-box';
-    topBox.innerHTML = `<div class="sub-group-title">🔒 Full 10 Safe: (10 cookies)</div>`;
+    topBox.innerHTML = `<div class="sub-group-title" style="color: #2e7d32;">🔒 Safe (10 cookies) - Untouched:</div>`;
     const g10 = document.createElement('div');
     g10.className = 'grid-5-group';
     for (let i = 0; i < 10; i++) {
@@ -1647,7 +1637,7 @@ function renderQuestionVisual() {
 
     const botBox = document.createElement('div');
     botBox.className = 'sub-group-box';
-    botBox.innerHTML = `<div class="sub-group-title">🎯 Subtract ${q_paramB} from these ${ones} stars:</div>`;
+    botBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">🎯 Subtract ${q_paramB} from these ${ones} stars:</div>`;
     const gOnes = document.createElement('div');
     gOnes.className = 'grid-5-group';
     for (let i = 0; i < ones; i++) {
@@ -1668,51 +1658,111 @@ function renderQuestionVisual() {
     wrap.appendChild(botBox);
     board.appendChild(wrap);
   }
+  // 3. Subtraction within 20 (Crossing 10) - 10在上面，散裝在下面，帶有防呆未食晒星星鎖住夾萬機制
   else if (q_type === 'sub20_cross') {
     const ones = q_paramA - 10;
+    const neededFromSafe = q_paramB - ones;
     const wrap = document.createElement('div');
     wrap.className = 'sub-crossing-wrap';
 
-    const onesBox = document.createElement('div');
-    onesBox.className = 'sub-group-box';
-    onesBox.innerHTML = `<div class="sub-group-title">1️⃣ Chomp these ${ones} stars first:</div>`;
-    const gOnes = document.createElement('div');
-    gOnes.className = 'grid-5-group';
-    for (let i = 0; i < ones; i++) {
+    // 1. 上方：夾萬 10 塊曲奇
+    const tenBox = document.createElement('div');
+    tenBox.className = 'sub-group-box';
+    tenBox.id = 'safe-ten-box';
+
+    const safeTitle = document.createElement('div');
+    safeTitle.className = 'sub-group-title';
+    safeTitle.id = 'safe-title-text';
+    safeTitle.style.color = '#c62828';
+    safeTitle.innerText = `🔒 Safe Locked! (10 cookies)`;
+    tenBox.appendChild(safeTitle);
+
+    const g10 = document.createElement('div');
+    g10.className = 'grid-5-group';
+
+    for (let i = 0; i < 10; i++) {
       const c = document.createElement('div');
       c.className = 'grid-item-cell';
+      c.innerText = '🍪';
+      c.onclick = function() {
+        if (isAnswered) return;
+
+        // 檢查下方散裝星星係咪已經全部被食晒
+        const stars = document.querySelectorAll('.star-crossing-cell');
+        let remainingStars = 0;
+        stars.forEach(s => {
+          if (!s.classList.contains('eaten')) remainingStars++;
+        });
+
+        if (remainingStars > 0) {
+          // 散星星未食晒：唔畀食，夾萬晃動警告！
+          playWrongSound();
+          tenBox.classList.remove('safe-shake');
+          void tenBox.offsetWidth; // trigger reflow
+          tenBox.classList.add('safe-shake');
+
+          const hBox = document.getElementById('hint-text');
+          hBox.style.color = '#d32f2f';
+          hBox.innerText = `🔒 Safe is LOCKED! Chomp the remaining ${remainingStars} star(s) below first!`;
+          return;
+        }
+
+        // 下面星星已食晒，夾萬解鎖，正常咬食
+        this.classList.toggle('eaten');
+        playDinoChomp();
+      };
+      g10.appendChild(c);
+    }
+    tenBox.appendChild(g10);
+
+    // 2. 下方：散裝星星
+    const onesBox = document.createElement('div');
+    onesBox.className = 'sub-group-box';
+    onesBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">⭐ 1️⃣ Chomp all ${ones} stars here first:</div>`;
+    const gOnes = document.createElement('div');
+    gOnes.className = 'grid-5-group';
+
+    for (let i = 0; i < ones; i++) {
+      const c = document.createElement('div');
+      c.className = 'grid-item-cell star-crossing-cell';
       c.innerText = '⭐';
       c.onclick = function() {
-        if (!isAnswered) {
-          this.classList.toggle('eaten');
-          playDinoChomp();
+        if (isAnswered) return;
+        this.classList.toggle('eaten');
+        playDinoChomp();
+
+        // 實時計算散裝星星剩餘量
+        const stars = document.querySelectorAll('.star-crossing-cell');
+        let remainingStars = 0;
+        stars.forEach(s => {
+          if (!s.classList.contains('eaten')) remainingStars++;
+        });
+
+        const sTitle = document.getElementById('safe-title-text');
+        const hBox = document.getElementById('hint-text');
+
+        if (remainingStars === 0) {
+          // 全部散星星食晒：即刻解鎖夾萬
+          playPop();
+          sTitle.style.color = '#2e7d32';
+          sTitle.innerText = `🔓 Safe Unlocked! Now chomp ${neededFromSafe} cookie(s) above:`;
+          hBox.style.color = '#2e7d32';
+          hBox.innerText = `🎉 Stars cleared! Now take ${neededFromSafe} cookie(s) from the safe!`;
+        } else {
+          // 未食晒，保持鎖定提示
+          sTitle.style.color = '#c62828';
+          sTitle.innerText = `🔒 Safe Locked! (10 cookies)`;
+          hBox.style.color = '#43a047';
+          hBox.innerText = `⭐ Chomp ${remainingStars} more star(s) below to unlock safe!`;
         }
       };
       gOnes.appendChild(c);
     }
     onesBox.appendChild(gOnes);
 
-    const tenBox = document.createElement('div');
-    tenBox.className = 'sub-group-box';
-    tenBox.innerHTML = `<div class="sub-group-title">2️⃣ Then chomp ${q_paramB - ones} more from the 10 cookies:</div>`;
-    const g10 = document.createElement('div');
-    g10.className = 'grid-5-group';
-    for (let i = 0; i < 10; i++) {
-      const c = document.createElement('div');
-      c.className = 'grid-item-cell';
-      c.innerText = '🍪';
-      c.onclick = function() {
-        if (!isAnswered) {
-          this.classList.toggle('eaten');
-          playDinoChomp();
-        }
-      };
-      g10.appendChild(c);
-    }
-    tenBox.appendChild(g10);
-
-    wrap.appendChild(onesBox);
+    // 依序排列：10 在上面，散星星在下面
     wrap.appendChild(tenBox);
+    wrap.appendChild(onesBox);
     board.appendChild(wrap);
   }
   else if (q_type === 'skip') {
