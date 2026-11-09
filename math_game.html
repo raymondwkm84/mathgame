@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dino Year 1 Math Adventure</title>
+
+<!-- 1. 瀏覽器標籤頁圖標 (Favicon) - 綠底金冠恐龍 -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%232e7d32%22/><text y=%2238%22 x=%2250%22 text-anchor=%22middle%22 font-size=%2234%22>👑</text><text y=%2282%22 x=%2250%22 text-anchor=%22middle%22 font-size=%2252%22>🦖</text></svg>">
+
+<!-- 2. Apple iOS / iPadOS 主畫面圖標 (Apple Touch Icon) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%232e7d32%22/><text y=%2238%22 x=%2250%22 text-anchor=%22middle%22 font-size=%2234%22>👑</text><text y=%2282%22 x=%2250%22 text-anchor=%22middle%22 font-size=%2252%22>🦖</text></svg>">
+
+<!-- 3. iOS 全螢幕 App 模式設定 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dino Math">
+
+<!-- 4. Android / Chrome 主畫面設定 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2e7d32">
+
 <style>
   /* =========================================
      1. BASE STYLING
@@ -246,7 +262,6 @@
     border-radius: 10px;
   }
 
-  /* Streak / Combo Fire Banner */
   .combo-badge {
     display: none;
     background: linear-gradient(135deg, #ff5722, #ff9800);
@@ -265,7 +280,6 @@
     100% { transform: scale(1.05); filter: drop-shadow(0 0 8px #ff5722); }
   }
 
-  /* Question box with Flame border when on streak */
   .question-box {
     font-size: 32px;
     font-weight: bold;
@@ -966,7 +980,6 @@ function playFrogJumpSound() {
   osc.stop(now + 0.15);
 }
 
-// Combo-scaled success chime
 function playSuccess(comboLevel = 1) {
   initAudio();
   const baseMultiplier = 1 + Math.min(comboLevel - 1, 6) * 0.08;
@@ -1328,7 +1341,6 @@ let isAnswered = false;
 let correctAns = null;
 let showVisual = true;
 
-// STREAK & SMART FADING STATE
 let currentStreak = 0;
 
 let q_paramA = 0;
@@ -1370,7 +1382,7 @@ function startMode(mode) {
   activeMode = mode;
   isChallenge = false;
   currentStreak = 0;
-  showVisual = true; // reset visual on new session
+  showVisual = true;
   updateVisualToggleBtn();
   updateStreakUI();
   document.getElementById('menu-view').style.display = 'none';
@@ -1534,7 +1546,7 @@ function nextQuestion() {
 
   q_type = mode;
 
-  // SMART FADING: 連續答啱 3 題以上，第 4 題起自動進入心算模式收起視覺
+  // 連續答啱 3 題自動進入心算模式
   if (currentStreak >= 3 && showVisual) {
     showVisual = false;
     updateVisualToggleBtn();
@@ -1663,7 +1675,6 @@ function nextQuestion() {
     hBox.innerText = `🦖 Dino always chomps the bigger number! Choose >, <, or =`;
   }
 
-  // If in mental mode, adjust hint
   if (!showVisual) {
     hBox.style.color = '#5e35b1';
     hBox.innerText = `🧠 Brain Power Challenge: Picture the cookies in your head!`;
@@ -2171,7 +2182,6 @@ function checkAnswer(chosen) {
     currentStreak++;
     updateStreakUI();
 
-    // 隨 Streak 增加音效頻率
     playSuccess(currentStreak);
 
     userData.todayScore++;
@@ -2217,12 +2227,11 @@ function checkAnswer(chosen) {
   } else {
     playWrongSound();
     
-    // 答錯時重置 Streak，若剛好在心算模式自動喚醒視覺
     currentStreak = 0;
     updateStreakUI();
 
     if (!showVisual) {
-      showVisual = true; // 安全網：心算答錯自動開圖支援
+      showVisual = true;
       updateVisualToggleBtn();
       renderQuestionVisual();
     }
