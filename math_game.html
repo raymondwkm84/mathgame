@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dino Year 1 Math Adventure</title>
 <style>
+  /* =========================================
+     1. BASE STYLING
+     ========================================= */
   body {
     font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
     background-color: #f4f9f4;
@@ -26,7 +29,9 @@
   }
   h1 { font-size: 24px; color: #2e7d32; margin: 0 0 8px 0; }
 
-  /* Login Panel */
+  /* =========================================
+     2. LOGIN PANEL
+     ========================================= */
   #login-view {
     display: flex;
     flex-direction: column;
@@ -56,7 +61,9 @@
     cursor: pointer;
   }
 
-  /* Status Dashboard */
+  /* =========================================
+     3. STATUS DASHBOARD & HEADER
+     ========================================= */
   .status-header {
     background: #e8f5e9;
     padding: 8px 12px;
@@ -138,7 +145,9 @@
     pointer-events: none;
   }
 
-  /* Menus Layout */
+  /* =========================================
+     4. MENUS & SUBMENUS
+     ========================================= */
   #menu-view, #submenu-add-view, #submenu-sub-view { display: none; }
   .section-label {
     text-align: left;
@@ -201,7 +210,9 @@
     color: white;
   }
 
-  /* Game View */
+  /* =========================================
+     5. GAME VIEW, COMBO & VISUALS
+     ========================================= */
   #game-view { display: none; }
   .top-bar {
     display: flex;
@@ -235,7 +246,46 @@
     border-radius: 10px;
   }
 
-  /* Bomb Rush Visual */
+  /* Streak / Combo Fire Banner */
+  .combo-badge {
+    display: none;
+    background: linear-gradient(135deg, #ff5722, #ff9800);
+    color: white;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 3px 12px;
+    border-radius: 14px;
+    margin: 2px auto 6px auto;
+    width: fit-content;
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.6);
+    animation: flamePulse 0.4s infinite alternate;
+  }
+  @keyframes flamePulse {
+    0% { transform: scale(0.96); filter: drop-shadow(0 0 3px #ff9800); }
+    100% { transform: scale(1.05); filter: drop-shadow(0 0 8px #ff5722); }
+  }
+
+  /* Question box with Flame border when on streak */
+  .question-box {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1b5e20;
+    margin: 4px 0 6px 0;
+    background: #e8f5e9;
+    padding: 6px 18px;
+    border-radius: 14px;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  .question-box.flaming {
+    border: 2px solid #ff5722;
+    background: #fff3e0;
+    box-shadow: 0 0 12px rgba(255, 87, 34, 0.4);
+  }
+
+  .instructions { color: #43a047; font-size: 13.5px; margin-bottom: 8px; font-weight: bold; min-height: 20px; }
+
+  /* Bomb Rush Widget */
   .bomb-timer-widget {
     display: inline-flex;
     flex-direction: column;
@@ -319,22 +369,10 @@
     100% { transform: scale(1.08); filter: drop-shadow(0 0 14px #ff1744); }
   }
 
-  .question-box {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1b5e20;
-    margin: 6px 0;
-    background: #e8f5e9;
-    padding: 6px 18px;
-    border-radius: 14px;
-    display: inline-block;
-  }
-  .instructions { color: #43a047; font-size: 13.5px; margin-bottom: 8px; font-weight: bold; min-height: 20px; }
-
-  /* Visual Container */
+  /* Visual Board */
   .visual-area {
     min-height: 120px;
-    margin: 10px 0;
+    margin: 8px 0;
     padding: 10px;
     background: #fffde7;
     border-radius: 16px;
@@ -398,7 +436,6 @@
     margin-bottom: 4px;
   }
 
-  /* Safe locked warning animation */
   .safe-shake {
     animation: lockShake 0.4s ease;
     border-color: #d32f2f !important;
@@ -565,14 +602,20 @@
   .frog-avatar-icon { font-size: 32px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); animation: frogBounce 1s infinite alternate ease-in-out; }
   @keyframes frogBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-7px); } }
 
+  /* Mental Box */
   .mental-box {
     background: #ffffff;
-    border: 2px dashed #b0bec5;
+    border: 2px dashed #7e57c2;
     border-radius: 14px;
     padding: 16px;
-    color: #78909c;
+    color: #5e35b1;
     font-size: 14px;
     font-weight: bold;
+    animation: mentalPulse 1.5s infinite alternate;
+  }
+  @keyframes mentalPulse {
+    0% { transform: scale(0.98); }
+    100% { transform: scale(1.02); }
   }
 
   /* Input Preview */
@@ -621,7 +664,7 @@
   .btn-opt.btn-compare { font-size: 32px; padding: 12px 0; background: #0288d1; box-shadow: 0 4px 0 #0277bd; }
   .btn-opt:active { transform: translateY(2px); box-shadow: none; }
   .btn-opt:disabled { opacity: 0.5; cursor: not-allowed; }
-  .msg-area { min-height: 30px; font-size: 17px; font-weight: bold; margin-top: 4px; }
+  .msg-area { min-height: 28px; font-size: 16px; font-weight: bold; margin-top: 4px; }
   .msg-area.retry { color: #d32f2f; }
   .msg-area.success { color: #2e7d32; }
 
@@ -783,6 +826,9 @@
         <button class="btn-back" id="btn-visual-toggle" onclick="toggleVisual()">👁️ Visual: ON</button>
       </div>
 
+      <!-- Streak / Combo Flame -->
+      <div id="combo-badge" class="combo-badge">🔥 Combo x2 Streak!</div>
+
       <div class="question-box" id="question-text">7 + 3 = ?</div>
       <div class="instructions" id="hint-text">Instructions</div>
 
@@ -920,15 +966,17 @@ function playFrogJumpSound() {
   osc.stop(now + 0.15);
 }
 
-function playSuccess() {
+// Combo-scaled success chime
+function playSuccess(comboLevel = 1) {
   initAudio();
-  const notes = [261.63, 329.63, 392.00, 523.25];
+  const baseMultiplier = 1 + Math.min(comboLevel - 1, 6) * 0.08;
+  const notes = [261.63, 329.63, 392.00, 523.25].map(f => f * baseMultiplier);
   notes.forEach((freq, idx) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-    gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.08);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime + idx * 0.08);
     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + idx * 0.08 + 0.16);
     osc.connect(gain);
     gain.connect(ctx.destination);
@@ -1220,7 +1268,7 @@ function openShop() {
           userData.equippedHat = item.id;
           saveUserData();
           updateDashboardUI();
-          playSuccess();
+          playSuccess(1);
           openShop();
         } else {
           alert("Not enough coins! Solve more questions to earn coins!");
@@ -1280,6 +1328,9 @@ let isAnswered = false;
 let correctAns = null;
 let showVisual = true;
 
+// STREAK & SMART FADING STATE
+let currentStreak = 0;
+
 let q_paramA = 0;
 let q_paramB = 0;
 let q_paramStep = 1;
@@ -1304,9 +1355,13 @@ function toggleVisual() {
   initAudio();
   playPop();
   showVisual = !showVisual;
+  updateVisualToggleBtn();
+  renderQuestionVisual();
+}
+
+function updateVisualToggleBtn() {
   const b = document.getElementById('btn-visual-toggle');
   b.innerText = showVisual ? '👁️ Visual: ON' : '🙈 Visual: OFF';
-  renderQuestionVisual();
 }
 
 function startMode(mode) {
@@ -1314,6 +1369,10 @@ function startMode(mode) {
   playPop();
   activeMode = mode;
   isChallenge = false;
+  currentStreak = 0;
+  showVisual = true; // reset visual on new session
+  updateVisualToggleBtn();
+  updateStreakUI();
   document.getElementById('menu-view').style.display = 'none';
   document.getElementById('submenu-add-view').style.display = 'none';
   document.getElementById('submenu-sub-view').style.display = 'none';
@@ -1328,6 +1387,10 @@ function startChallenge(chType) {
   activeChallenge = chType;
   isChallenge = true;
   challengeQCount = 0;
+  currentStreak = 0;
+  showVisual = true;
+  updateVisualToggleBtn();
+  updateStreakUI();
   document.getElementById('menu-view').style.display = 'none';
   document.getElementById('submenu-add-view').style.display = 'none';
   document.getElementById('submenu-sub-view').style.display = 'none';
@@ -1366,6 +1429,19 @@ function startChallenge(chType) {
     }, 1000);
   }
   nextQuestion();
+}
+
+function updateStreakUI() {
+  const badge = document.getElementById('combo-badge');
+  const qBox = document.getElementById('question-text');
+  if (currentStreak >= 2) {
+    badge.innerText = `🔥 Combo x${currentStreak} Streak!`;
+    badge.style.display = 'block';
+    qBox.classList.add('flaming');
+  } else {
+    badge.style.display = 'none';
+    qBox.classList.remove('flaming');
+  }
 }
 
 function updateTimerBanner(txt) {
@@ -1457,6 +1533,12 @@ function nextQuestion() {
   }
 
   q_type = mode;
+
+  // SMART FADING: 連續答啱 3 題以上，第 4 題起自動進入心算模式收起視覺
+  if (currentStreak >= 3 && showVisual) {
+    showVisual = false;
+    updateVisualToggleBtn();
+  }
 
   const qBox = document.getElementById('question-text');
   const hBox = document.getElementById('hint-text');
@@ -1581,6 +1663,14 @@ function nextQuestion() {
     hBox.innerText = `🦖 Dino always chomps the bigger number! Choose >, <, or =`;
   }
 
+  // If in mental mode, adjust hint
+  if (!showVisual) {
+    hBox.style.color = '#5e35b1';
+    hBox.innerText = `🧠 Brain Power Challenge: Picture the cookies in your head!`;
+  } else {
+    hBox.style.color = '#43a047';
+  }
+
   renderQuestionVisual();
   renderKeypad();
 }
@@ -1592,9 +1682,9 @@ function renderQuestionVisual() {
   if (!showVisual) {
     board.innerHTML = `
       <div class="mental-box">
-        <div style="font-size: 32px;">🧠💭</div>
-        <div>Mental Math Mode Active!</div>
-        <div style="font-size: 11px; color: #999;">Picture the numbers in your mind!</div>
+        <div style="font-size: 34px;">🧠💭✨</div>
+        <div style="font-size: 15px; margin-top: 4px;">Brain Power Mode Active!</div>
+        <div style="font-size: 11.5px; opacity: 0.85; margin-top: 2px;">Picture the ten-frames and cookies in your mind!</div>
       </div>
     `;
     return;
@@ -1658,14 +1748,12 @@ function renderQuestionVisual() {
     wrap.appendChild(botBox);
     board.appendChild(wrap);
   }
-  // 3. Subtraction within 20 (Crossing 10) - 10在上面，散裝在下面，帶有防呆未食晒星星鎖住夾萬機制
   else if (q_type === 'sub20_cross') {
     const ones = q_paramA - 10;
     const neededFromSafe = q_paramB - ones;
     const wrap = document.createElement('div');
     wrap.className = 'sub-crossing-wrap';
 
-    // 1. 上方：夾萬 10 塊曲奇
     const tenBox = document.createElement('div');
     tenBox.className = 'sub-group-box';
     tenBox.id = 'safe-ten-box';
@@ -1687,7 +1775,6 @@ function renderQuestionVisual() {
       c.onclick = function() {
         if (isAnswered) return;
 
-        // 檢查下方散裝星星係咪已經全部被食晒
         const stars = document.querySelectorAll('.star-crossing-cell');
         let remainingStars = 0;
         stars.forEach(s => {
@@ -1695,10 +1782,9 @@ function renderQuestionVisual() {
         });
 
         if (remainingStars > 0) {
-          // 散星星未食晒：唔畀食，夾萬晃動警告！
           playWrongSound();
           tenBox.classList.remove('safe-shake');
-          void tenBox.offsetWidth; // trigger reflow
+          void tenBox.offsetWidth;
           tenBox.classList.add('safe-shake');
 
           const hBox = document.getElementById('hint-text');
@@ -1707,7 +1793,6 @@ function renderQuestionVisual() {
           return;
         }
 
-        // 下面星星已食晒，夾萬解鎖，正常咬食
         this.classList.toggle('eaten');
         playDinoChomp();
       };
@@ -1715,7 +1800,6 @@ function renderQuestionVisual() {
     }
     tenBox.appendChild(g10);
 
-    // 2. 下方：散裝星星
     const onesBox = document.createElement('div');
     onesBox.className = 'sub-group-box';
     onesBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">⭐ 1️⃣ Chomp all ${ones} stars here first:</div>`;
@@ -1731,7 +1815,6 @@ function renderQuestionVisual() {
         this.classList.toggle('eaten');
         playDinoChomp();
 
-        // 實時計算散裝星星剩餘量
         const stars = document.querySelectorAll('.star-crossing-cell');
         let remainingStars = 0;
         stars.forEach(s => {
@@ -1742,14 +1825,12 @@ function renderQuestionVisual() {
         const hBox = document.getElementById('hint-text');
 
         if (remainingStars === 0) {
-          // 全部散星星食晒：即刻解鎖夾萬
           playPop();
           sTitle.style.color = '#2e7d32';
           sTitle.innerText = `🔓 Safe Unlocked! Now chomp ${neededFromSafe} cookie(s) above:`;
           hBox.style.color = '#2e7d32';
           hBox.innerText = `🎉 Stars cleared! Now take ${neededFromSafe} cookie(s) from the safe!`;
         } else {
-          // 未食晒，保持鎖定提示
           sTitle.style.color = '#c62828';
           sTitle.innerText = `🔒 Safe Locked! (10 cookies)`;
           hBox.style.color = '#43a047';
@@ -1760,7 +1841,6 @@ function renderQuestionVisual() {
     }
     onesBox.appendChild(gOnes);
 
-    // 依序排列：10 在上面，散星星在下面
     wrap.appendChild(tenBox);
     wrap.appendChild(onesBox);
     board.appendChild(wrap);
@@ -2088,7 +2168,12 @@ function checkAnswer(chosen) {
 
   if (chosen === correctAns) {
     isAnswered = true;
-    playSuccess();
+    currentStreak++;
+    updateStreakUI();
+
+    // 隨 Streak 增加音效頻率
+    playSuccess(currentStreak);
+
     userData.todayScore++;
     userData.totalScore++;
     userData.todayCoins++;
@@ -2112,8 +2197,9 @@ function checkAnswer(chosen) {
     saveUserData();
     updateDashboardUI();
 
+    const streakMsg = currentStreak >= 3 ? ` 🔥 ${currentStreak} In a Row!` : '';
     document.getElementById('msg-text').className = 'msg-area success';
-    document.getElementById('msg-text').innerText = '🎉 Correct! +1 Coin!';
+    document.getElementById('msg-text').innerText = `🎉 Correct! +1 Coin!${streakMsg}`;
 
     if (isChallenge) {
       challengeQCount++;
@@ -2127,9 +2213,20 @@ function checkAnswer(chosen) {
       }
     }
 
-    setTimeout(() => { nextQuestion(); }, 1200);
+    setTimeout(() => { nextQuestion(); }, 1100);
   } else {
     playWrongSound();
+    
+    // 答錯時重置 Streak，若剛好在心算模式自動喚醒視覺
+    currentStreak = 0;
+    updateStreakUI();
+
+    if (!showVisual) {
+      showVisual = true; // 安全網：心算答錯自動開圖支援
+      updateVisualToggleBtn();
+      renderQuestionVisual();
+    }
+
     userData.totalWrong++;
     userData.topicStats[q_type].wrong++;
     saveUserData();
@@ -2139,7 +2236,7 @@ function checkAnswer(chosen) {
 }
 
 function showChallengeResult(title, desc) {
-  playSuccess();
+  playSuccess(1);
   document.getElementById('res-title').innerHTML = title;
   document.getElementById('res-desc').innerHTML = desc;
   document.getElementById('result-modal').style.display = 'flex';
