@@ -450,17 +450,6 @@
     margin-bottom: 4px;
   }
 
-  .safe-shake {
-    animation: lockShake 0.4s ease;
-    border-color: #d32f2f !important;
-    background-color: #ffebee !important;
-  }
-  @keyframes lockShake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
-  }
-
   /* Double Mirror Visual */
   .mirror-container {
     display: flex;
@@ -1597,7 +1586,7 @@ function nextQuestion() {
     if (q_paramB >= q_paramA) q_paramB = q_paramA - 1;
     correctAns = q_paramA - q_paramB;
     qBox.innerText = `${q_paramA} - ${q_paramB} = ?`;
-    hBox.innerText = `⭐ Chomp all ${onesA} stars below first! Safe will unlock!`;
+    hBox.innerText = `🦖 Dino chomps ${q_paramB} in total! Tap cookies & stars to chomp!`;
   }
   else if (mode === 'bonds') {
     document.getElementById('mode-badge').innerText = 'Number Bonds';
@@ -1759,93 +1748,48 @@ function renderQuestionVisual() {
     wrap.appendChild(botBox);
     board.appendChild(wrap);
   }
+  // 3. Subtraction within 20 (Crossing 10) - 全部解鎖，上下都可以自由點擊食！
   else if (q_type === 'sub20_cross') {
     const ones = q_paramA - 10;
-    const neededFromSafe = q_paramB - ones;
     const wrap = document.createElement('div');
     wrap.className = 'sub-crossing-wrap';
 
+    // 上方：10 塊曲奇（直接解鎖可食）
     const tenBox = document.createElement('div');
     tenBox.className = 'sub-group-box';
-    tenBox.id = 'safe-ten-box';
-
-    const safeTitle = document.createElement('div');
-    safeTitle.className = 'sub-group-title';
-    safeTitle.id = 'safe-title-text';
-    safeTitle.style.color = '#c62828';
-    safeTitle.innerText = `🔒 Safe Locked! (10 cookies)`;
-    tenBox.appendChild(safeTitle);
+    tenBox.innerHTML = `<div class="sub-group-title" style="color: #2e7d32;">🍪 10 Cookies (Tap to chomp):</div>`;
 
     const g10 = document.createElement('div');
     g10.className = 'grid-5-group';
-
     for (let i = 0; i < 10; i++) {
       const c = document.createElement('div');
       c.className = 'grid-item-cell';
       c.innerText = '🍪';
       c.onclick = function() {
-        if (isAnswered) return;
-
-        const stars = document.querySelectorAll('.star-crossing-cell');
-        let remainingStars = 0;
-        stars.forEach(s => {
-          if (!s.classList.contains('eaten')) remainingStars++;
-        });
-
-        if (remainingStars > 0) {
-          playWrongSound();
-          tenBox.classList.remove('safe-shake');
-          void tenBox.offsetWidth;
-          tenBox.classList.add('safe-shake');
-
-          const hBox = document.getElementById('hint-text');
-          hBox.style.color = '#d32f2f';
-          hBox.innerText = `🔒 Safe is LOCKED! Chomp the remaining ${remainingStars} star(s) below first!`;
-          return;
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
         }
-
-        this.classList.toggle('eaten');
-        playDinoChomp();
       };
       g10.appendChild(c);
     }
     tenBox.appendChild(g10);
 
+    // 下方：散裝星星（直接解鎖可食）
     const onesBox = document.createElement('div');
     onesBox.className = 'sub-group-box';
-    onesBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">⭐ 1️⃣ Chomp all ${ones} stars here first:</div>`;
+    onesBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">⭐ ${ones} Loose Stars (Tap to chomp):</div>`;
+
     const gOnes = document.createElement('div');
     gOnes.className = 'grid-5-group';
-
     for (let i = 0; i < ones; i++) {
       const c = document.createElement('div');
-      c.className = 'grid-item-cell star-crossing-cell';
+      c.className = 'grid-item-cell';
       c.innerText = '⭐';
       c.onclick = function() {
-        if (isAnswered) return;
-        this.classList.toggle('eaten');
-        playDinoChomp();
-
-        const stars = document.querySelectorAll('.star-crossing-cell');
-        let remainingStars = 0;
-        stars.forEach(s => {
-          if (!s.classList.contains('eaten')) remainingStars++;
-        });
-
-        const sTitle = document.getElementById('safe-title-text');
-        const hBox = document.getElementById('hint-text');
-
-        if (remainingStars === 0) {
-          playPop();
-          sTitle.style.color = '#2e7d32';
-          sTitle.innerText = `🔓 Safe Unlocked! Now chomp ${neededFromSafe} cookie(s) above:`;
-          hBox.style.color = '#2e7d32';
-          hBox.innerText = `🎉 Stars cleared! Now take ${neededFromSafe} cookie(s) from the safe!`;
-        } else {
-          sTitle.style.color = '#c62828';
-          sTitle.innerText = `🔒 Safe Locked! (10 cookies)`;
-          hBox.style.color = '#43a047';
-          hBox.innerText = `⭐ Chomp ${remainingStars} more star(s) below to unlock safe!`;
+        if (!isAnswered) {
+          this.classList.toggle('eaten');
+          playDinoChomp();
         }
       };
       gOnes.appendChild(c);
