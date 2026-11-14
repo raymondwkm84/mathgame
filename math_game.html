@@ -1328,7 +1328,10 @@ let challengeQCount = 0;
 let questionStartTime = 0;
 let isAnswered = false;
 let correctAns = null;
+
+// 視覺控制狀態（含手動關閉鎖定記憶）
 let showVisual = true;
+let manualVisualOff = false;
 
 let currentStreak = 0;
 
@@ -1356,6 +1359,7 @@ function toggleVisual() {
   initAudio();
   playPop();
   showVisual = !showVisual;
+  manualVisualOff = !showVisual; // 鎖定用戶手動偏好
   updateVisualToggleBtn();
   renderQuestionVisual();
 }
@@ -1371,7 +1375,7 @@ function startMode(mode) {
   activeMode = mode;
   isChallenge = false;
   currentStreak = 0;
-  showVisual = true;
+  showVisual = !manualVisualOff; // 尊重用戶手動開關偏好
   updateVisualToggleBtn();
   updateStreakUI();
   document.getElementById('menu-view').style.display = 'none';
@@ -1389,7 +1393,7 @@ function startChallenge(chType) {
   isChallenge = true;
   challengeQCount = 0;
   currentStreak = 0;
-  showVisual = true;
+  showVisual = !manualVisualOff;
   updateVisualToggleBtn();
   updateStreakUI();
   document.getElementById('menu-view').style.display = 'none';
@@ -1535,8 +1539,8 @@ function nextQuestion() {
 
   q_type = mode;
 
-  // 連續答啱 3 題自動進入心算模式
-  if (currentStreak >= 3 && showVisual) {
+  // 連續答啱 3 題自動進入心算模式（除非本身已手動熄咗）
+  if (!manualVisualOff && currentStreak >= 3 && showVisual) {
     showVisual = false;
     updateVisualToggleBtn();
   }
@@ -1748,13 +1752,11 @@ function renderQuestionVisual() {
     wrap.appendChild(botBox);
     board.appendChild(wrap);
   }
-  // 3. Subtraction within 20 (Crossing 10) - 全部解鎖，上下都可以自由點擊食！
   else if (q_type === 'sub20_cross') {
     const ones = q_paramA - 10;
     const wrap = document.createElement('div');
     wrap.className = 'sub-crossing-wrap';
 
-    // 上方：10 塊曲奇（直接解鎖可食）
     const tenBox = document.createElement('div');
     tenBox.className = 'sub-group-box';
     tenBox.innerHTML = `<div class="sub-group-title" style="color: #2e7d32;">🍪 10 Cookies (Tap to chomp):</div>`;
@@ -1775,7 +1777,6 @@ function renderQuestionVisual() {
     }
     tenBox.appendChild(g10);
 
-    // 下方：散裝星星（直接解鎖可食）
     const onesBox = document.createElement('div');
     onesBox.className = 'sub-group-box';
     onesBox.innerHTML = `<div class="sub-group-title" style="color: #e65100;">⭐ ${ones} Loose Stars (Tap to chomp):</div>`;
@@ -2174,7 +2175,8 @@ function checkAnswer(chosen) {
     currentStreak = 0;
     updateStreakUI();
 
-    if (!showVisual) {
+    // 若非手動關閉視覺，答錯時重新顯示圖片救駕
+    if (!showVisual && !manualVisualOff) {
       showVisual = true;
       updateVisualToggleBtn();
       renderQuestionVisual();
